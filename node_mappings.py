@@ -14,10 +14,10 @@ NODE_CLASS_MAPPINGS = {
 
 # A dictionary that contains the friendly/humanly readable titles for the nodes
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "Maliooo_Get_Controlnet_Name": "Get Controlnet Name",
-    "Maliooo_ControlNetStack_By_Name": "ControlNet Stack By Name",
-    "Maliooo_Get_Lora_Name": "Get Lora Name",
-    "Maliooo_LoRAStack_By_Name": "LoRA Stack By Name",
-    "Maliooo_ImageScale_Side": "Image Scale Side 按边缩放图片",
-    "Maliooo_NSFWDetection": "NSFW Detection"
+    "Maliooo_Get_Controlnet_Name": "Malio Get Controlnet Name",
+    "Maliooo_ControlNetStack_By_Name": "Malio ControlNet Stack By Name",
+    "Maliooo_Get_Lora_Name": "Malio Get Lora Name",
+    "Maliooo_LoRAStack_By_Name": "Malio LoRA Stack By Name",
+    "Maliooo_ImageScale_Side": "Malio Image Scale Side 按边缩放图片",
+    "Maliooo_NSFWDetection": "Malio NSFW Detection"
 }
