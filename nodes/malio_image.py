@@ -1,6 +1,6 @@
 import math
-from components.fields import Field
-from components.sizes import get_image_size
+from .components.fields import Field
+from .components.sizes import get_image_size
 from comfy.utils import common_upscale
 
 scale_methods = ["nearest-exact", "bilinear", "bicubic", "bislerp", "area", "lanczos"]
