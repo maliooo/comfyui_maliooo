@@ -288,10 +288,15 @@ class Maliooo_ControlNetStack:
 
 
 NODE_CLASS_MAPPINGS = {
-    "Example": Example
+    "Example": Example,
+    "Maliooo_Get_Controlnet_Name": Maliooo_Get_Controlnet_Name,
+    "Maliooo_ControlNetStack_By_Name": Maliooo_ControlNetStack_By_Name
 }
 
 # A dictionary that contains the friendly/humanly readable titles for the nodes
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "Example": "Example Node"
+    "Example": "Example Node",
+    "Maliooo_Get_Controlnet_Name": "Get Controlnet Name",
+    "Maliooo_ControlNetStack_By_Name": "ControlNet Stack By Name"
+
 }
