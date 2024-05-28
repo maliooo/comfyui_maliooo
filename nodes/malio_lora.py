@@ -31,7 +31,7 @@ class Malio_Get_Lora_Name:
 
     #OUTPUT_NODE = False
 
-    CATEGORY = "malio/get_lora_name"
+    CATEGORY = "🐼malio/lora/get_lora_name"
 
     def get_lora_name(self, lora_name):
         if isinstance(lora_name, str):
@@ -66,7 +66,7 @@ class Malio_LoRAStack_By_Name:
     RETURN_TYPES = ("LORA_STACK", "STRING", )
     RETURN_NAMES = ("LORA_STACK", "show_help", )
     FUNCTION = "lora_stacker"
-    CATEGORY = "malio/lora_stack"
+    CATEGORY = "🐼malio/lora/lora_stack"
 
     def lora_stacker(self, lora_name_1, model_weight_1, clip_weight_1, switch_1, lora_name_2, model_weight_2, clip_weight_2, switch_2, lora_name_3, model_weight_3, clip_weight_3, switch_3, lora_stack=None):
 

@@ -31,7 +31,7 @@ class Malio_Get_Controlnet_Name:
 
     #OUTPUT_NODE = False
 
-    CATEGORY = "malio/controlnet_name"
+    CATEGORY = "🐼malio/controlnet/controlnet_name"
 
     def get_controlnet_name(self, controlnet):
         if isinstance(controlnet, str):
@@ -74,7 +74,7 @@ class Malio_ControlNetStack_By_Name:
     RETURN_TYPES = ("CONTROL_NET_STACK", "STRING", )
     RETURN_NAMES = ("CONTROLNET_STACK", "show_help", )
     FUNCTION = "controlnet_stacker"
-    CATEGORY = "malio/controlnet"
+    CATEGORY = "🐼malio/controlnet/stack_by_name"
 
     def controlnet_stacker(self, 
                            switch_1, controlnet_1_name, controlnet_strength_1, start_percent_1, end_percent_1,

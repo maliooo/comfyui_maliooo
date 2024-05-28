@@ -29,7 +29,7 @@ class Malio_ImageScale_Side:
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "upscale"
 
-    CATEGORY = "malio/image_scale_side"
+    CATEGORY = "🐼malio/image/image_scale_side"
 
     def upscale(self, image, upscale_method, side_length: int, side: str, crop, divisible_num: int):
         samples = image.movedim(-1, 1)
