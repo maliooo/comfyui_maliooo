@@ -138,11 +138,7 @@ class Maliooo_Get_Controlnet_Name:
     CATEGORY = "maliooo/controlnet_name"
 
     def get_controlnet_name(self, controlnet):
-        if controlnet == "None":
-            return ("None",)
-        else:
-            controlnet_path = folder_paths.get_full_path("controlnet", controlnet)
-        return (controlnet_path,)
+        return (controlnet, )
 
 class Maliooo_ControlNetStack_By_Name:
 
@@ -155,19 +151,19 @@ class Maliooo_ControlNetStack_By_Name:
                 },
                 "optional": {
                     "switch_1": ("BOOLEAN", {"default": False}),
-                    "controlnet_1_path": ("STRING",{"default": "None"}),
+                    "controlnet_1_name": ("STRING",{"default": "None"}),
                     "controlnet_strength_1": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01}),
                     "start_percent_1": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.001}),
                     "end_percent_1": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.001}),
                     #
                     "switch_2": ("BOOLEAN", {"default": True}),
-                    "controlnet_2_path": ("STRING",{"default": "None"}),
+                    "controlnet_2_name": ("STRING",{"default": "None"}),
                     "controlnet_strength_2": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01}),
                     "start_percent_2": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.001}),
                     "end_percent_2": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.001}),
                     #
                     "switch_3": ("BOOLEAN", {"default": True}),
-                    "controlnet_3_path": ("STRING",{"default": "None"}),
+                    "controlnet_3_name": ("STRING",{"default": "None"}),
                     "controlnet_strength_3": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01}),
                     "start_percent_3": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.001}),
                     "end_percent_3": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.001}),
@@ -184,9 +180,9 @@ class Maliooo_ControlNetStack_By_Name:
     FUNCTION = "controlnet_stacker"
     CATEGORY = "maliooo/controlnet"
 
-    def controlnet_stacker(self, switch_1, controlnet_1_path, controlnet_strength_1, start_percent_1, end_percent_1,
-                           switch_2, controlnet_2_path, controlnet_strength_2, start_percent_2, end_percent_2,
-                           switch_3, controlnet_3_path, controlnet_strength_3, start_percent_3, end_percent_3,
+    def controlnet_stacker(self, switch_1, controlnet_1_name, controlnet_strength_1, start_percent_1, end_percent_1,
+                           switch_2, controlnet_2_name, controlnet_strength_2, start_percent_2, end_percent_2,
+                           switch_3, controlnet_3_name, controlnet_strength_3, start_percent_3, end_percent_3,
                            image_1=None, image_2=None, image_3=None, controlnet_stack=None):
 
         # Initialise the list
@@ -195,19 +191,19 @@ class Maliooo_ControlNetStack_By_Name:
         if controlnet_stack is not None:
             controlnet_list.extend([l for l in controlnet_stack if l[0] != "None"])
         
-        if controlnet_1_path != "None" and  switch_1 and image_1 is not None:
-            # controlnet_path = folder_paths.get_full_path("controlnet", controlnet_1)
-            controlnet_1 = comfy.controlnet.load_controlnet(controlnet_1_path)
+        if controlnet_1_name != "None" and  switch_1 and image_1 is not None:
+            controlnet_path = folder_paths.get_full_path("controlnet", controlnet_1_name)
+            controlnet_1 = comfy.controlnet.load_controlnet(controlnet_path)
             controlnet_list.extend([(controlnet_1, image_1, controlnet_strength_1, start_percent_1, end_percent_1)]),
 
-        if controlnet_2_path != "None" and  switch_2 and image_2 is not None:
-            # controlnet_path = folder_paths.get_full_path("controlnet", controlnet_2)
-            controlnet_2 = comfy.controlnet.load_controlnet(controlnet_2_path)
+        if controlnet_2_name != "None" and  switch_2 and image_2 is not None:
+            controlnet_path = folder_paths.get_full_path("controlnet", controlnet_2_name)
+            controlnet_2 = comfy.controlnet.load_controlnet(controlnet_path)
             controlnet_list.extend([(controlnet_2, image_2, controlnet_strength_2, start_percent_2, end_percent_2)]),
 
-        if controlnet_3_path != "None" and  switch_3 and image_3 is not None:
-            # controlnet_path = folder_paths.get_full_path("controlnet", controlnet_3)
-            controlnet_3 = comfy.controlnet.load_controlnet(controlnet_3_path)
+        if controlnet_3_name != "None" and  switch_3 and image_3 is not None:
+            controlnet_path = folder_paths.get_full_path("controlnet", controlnet_3_name)
+            controlnet_3 = comfy.controlnet.load_controlnet(controlnet_path)
             controlnet_list.extend([(controlnet_3, image_3, controlnet_strength_3, start_percent_3, end_percent_3)]),
 
         show_help = "https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes/wiki/ControlNet-Nodes#cr-multi-controlnet-stack"
