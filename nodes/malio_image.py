@@ -6,6 +6,7 @@ from comfy.utils import common_upscale
 scale_methods = ["nearest-exact", "bilinear", "bicubic", "bislerp", "area", "lanczos"]
 
 class Malio_ImageScale_Side:
+    """Image Scale Side 按边缩放图片"""
     scale_methods = scale_methods
     crop_methods = ["disabled", "center"]
 
@@ -21,8 +22,7 @@ class Malio_ImageScale_Side:
                 "side": Field.combo(["Longest", "Shortest", "Width", "Height"]),
                 "upscale_method": Field.combo(cls.scale_methods),
                 "crop": Field.combo(cls.crop_methods),
-                # 整除数字
-                "divisible_num": ("INT", {"default": 1, "min": 1, "max": 32}),
+                "divisible_num": ("INT", {"default": 1, "min": 1, "max": 32}), # 整除数字
             }
         }
 
