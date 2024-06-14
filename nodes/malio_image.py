@@ -3,6 +3,14 @@ from .components.fields import Field
 from .components.sizes import get_image_size
 from comfy.utils import common_upscale
 import sys
+import os
+from PIL import Image, ImageOps
+import numpy as np
+import torch
+from langchain.prompts.prompt import PromptTemplate
+from langchain.llms import VolcEngineMaasLLM
+import requests
+from .utils import pil2tensor
 
 scale_methods = ["nearest-exact", "bilinear", "bicubic", "bislerp", "area", "lanczos"]
 
@@ -153,7 +161,7 @@ class Malio_ImageScale_Side_Cascade:
             height = height // divisible_num * divisible_num
         else:
             # 缩放到cascade的比例
-            nums = [256,320,384,512,576,640,768,816,832,896,1024]
+            nums = [256,320,384,512,576,640,768,816,832,896,1024,1088,1152,1280,1344,1440,1536,1920]
             short_side = min(width, height)
             # 计算短边最接近的数值
             short_side = min(nums, key=lambda x:abs(x-short_side))
@@ -165,3 +173,55 @@ class Malio_ImageScale_Side_Cascade:
         res = common_upscale(samples, width, height, upscale_method, crop)
         res = res.movedim(1, -1)  # 移动维度
         return (res,)
+
+
+class Maliooo_LoadImageFromUrl:
+    """Load an image from the given URL"""
+    # 来源：\custom_nodes\comfy_mtb\nodes\image_processing.py
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "url": (
+                    "STRING",
+                    {
+                        "default": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Example.jpg/800px-Example.jpg"
+                    },
+                ),
+            }
+        }
+
+    RETURN_TYPES = ("IMAGE","STRING","STRING","STRING")
+    RETURN_NAMES = ("IMAGE", "positive_prompt", "negative_prompt", "params" )
+    FUNCTION = "load"
+    CATEGORY = "mtb/IO"
+
+    def load(self, url):
+        # get the image from the url
+        image = Image.open(requests.get(url, stream=True).raw)
+        image = ImageOps.exif_transpose(image)
+        
+        info = None
+        positive_text = None
+        negative_text = None
+        try:
+            info = image.info["parameters"].split("\n")
+            positive_text = info[0]
+            negative_text = info[1]
+            params = info[2]
+        except Exception as e:
+            print(f"图片提取info信息出错，Maliooo_LoadImageFromUrl: {e}")
+        
+        if info and len(info) == 3:
+            return (pil2tensor(image), positive_text, negative_text, params)
+        else:
+            return (pil2tensor(image), None, None, None)
+
+
+
+
+        
+        
+
+
