@@ -3,12 +3,7 @@ from .components.fields import Field
 from .components.sizes import get_image_size
 from comfy.utils import common_upscale
 import sys
-import os
 from PIL import Image, ImageOps
-import numpy as np
-import torch
-from langchain.prompts.prompt import PromptTemplate
-from langchain.llms import VolcEngineMaasLLM
 import requests
 from .utils import pil2tensor
 
@@ -202,6 +197,7 @@ class Maliooo_LoadImageFromUrl:
         image = Image.open(requests.get(url, stream=True).raw)
         image = ImageOps.exif_transpose(image)
         
+        # 提取info信息
         info = None
         positive_text = None
         negative_text = None
