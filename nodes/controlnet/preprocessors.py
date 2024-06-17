@@ -56,7 +56,7 @@ try:
     if "LineartStandardPreprocessor" in nodes:
         control_net_preprocessors["lineart_standard"] = (
             nodes["LineartStandardPreprocessor"],
-            [],
+            [6.0, 8],  # guassian_sigma, intensity_threshold
         )
     if "AnimeLineArtPreprocessor" in nodes:
         control_net_preprocessors["lineart_anime"] = (
@@ -126,7 +126,7 @@ try:
     if "LeReS-DepthMapPreprocessor" in nodes:
         control_net_preprocessors["depth_leres"] = (
             nodes["LeReS-DepthMapPreprocessor"],
-            [],
+            [0.0, 0.0, "disable"],  # rm_nearest, rm_background, boost
         )
 
     if "OneFormer-COCO-SemSegPreprocessor" in nodes:
