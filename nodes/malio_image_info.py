@@ -1,6 +1,7 @@
 import json
 import re
 import folder_paths
+from .controlnet import apply_preprocessor
 
 def extract_info_from_webui_img(info:str):
     """从webui 生成的img中提取信息"""
@@ -227,13 +228,15 @@ class Malio_Webui_Info_Params:
 class Maliooo_Get_Process_Images:
     """根据webui的生成信息，得到controlnet的预处理图片列表"""
     controlnets = ["None"]
+
+    @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
                     "controlnet_infos": ("CONTROL_INFOS",), 
                 },
             "optional": {
-                    "controlnet_1": (cls.controlnets,),
+                    "process_list": (cls.controlnets,),
                     #
                 }
         }
@@ -252,35 +255,42 @@ class Maliooo_Get_Controlnet_Stack:
     def INPUT_TYPES(s):
         return {"required": 
                 {
-                    "image1": ("IMAGE",),
-                    "image2": ("IMAGE",),
-                    "image3": ("IMAGE",),
+                    "image": ("IMAGE",),
                     "controlnet_infos": ("CONTROL_INFOS",), 
                 }
         }
-    RETURN_TYPES = ("CONTROL_NET_STACK")
-    RETURN_NAMES = ("controlnet_stack")
+    RETURN_TYPES = ("CONTROL_NET_STACK", "STRING", "IMAGE")
+    RETURN_NAMES = ("controlnet_stack", "show_help", "image")
     FUNCTION = "get_controlnet_stacks"
 
     CATEGORY = "conditioning"
 
-    def get_controlnet_stacks(self, image1, image2, image3, controlnet_infos):
-        image_list = [image1, image2, image3]
+    def get_controlnet_stacks(self, image, controlnet_infos):
         controlnet_file_paths = folder_paths.get_filename_list("controlnet")  # 本地的controlnet文件
         controlnet_list = []
+        imgs = []
         for index, controlnet in enumerate(controlnet_infos):
             if index >= 3:  # 最多只能有3个controlnet
                 break
-            if image_list[index] is None:
-                print(f"controlnet的预处理图， image{index+1} is None")
-                continue
+            preprocessor = controlnet["Module"]  # 预处理器
+            pixel_perfect = controlnet["Pixel Perfect"]  # 是否完美像素
+            if pixel_perfect.lower() == "false":
+                resolution = 512
 
             # 遍历从信息中提取得到的controlnet
             for controlnet_file_path in controlnet_file_paths:    # 遍历本地的controlnet文件
                 # controlnet_file_path 不要后缀
                 tmp_controlnet_file_path = controlnet_file_path.split(".")[0]
                 if tmp_controlnet_file_path.lower() in controlnet["model"].lower():
+                    # 获得controlnet的预处理器得到的预处理图片
+                    preprocess_image = apply_preprocessor(image=image, preprocessor=preprocessor, resolution=resolution)
+                    imgs.append(preprocess_image)
+                    
                     # controlnet_list.extend([(controlnet_3, image_3, controlnet_strength_3, start_percent_3, end_percent_3)])
-                    controlnet_list.extend([controlnet_file_path, image_list[index], float(controlnet["Weight"]), float(controlnet["Guidance Start"]), float(controlnet["Guidance End"])])
+                    controlnet_list.extend([controlnet_file_path, preprocess_image, float(controlnet["Weight"]), float(controlnet["Guidance Start"]), float(controlnet["Guidance End"])])
+                    break
 
-        return (controlnet_list,)
+        show_help = "显示帮助信息"
+
+        #  return (controlnet_list) 如果只返回一个会出错，不知道为啥
+        return (controlnet_list, show_help, imgs)  
