@@ -181,14 +181,14 @@ class Maliooo_LoadImageFromUrl:
                 "url": (
                     "STRING",
                     {
-                        "default": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Example.jpg/800px-Example.jpg"
+                        "default": "https://image9.znzmo.com/256ded95-6af1-4874-8d22-73c6d8da9f1c.png"
                     },
                 ),
             }
         }
 
-    RETURN_TYPES = ("IMAGE","STRING","STRING","STRING")
-    RETURN_NAMES = ("IMAGE", "positive_prompt", "negative_prompt", "params" )
+    RETURN_TYPES = ("IMAGE","STRING","STRING","STRING","STRING")
+    RETURN_NAMES = ("IMAGE","image_info","positive_prompt", "negative_prompt", "params" )
     FUNCTION = "load"
     CATEGORY = "mtb/IO"
 
@@ -201,18 +201,22 @@ class Maliooo_LoadImageFromUrl:
         info = None
         positive_text = None
         negative_text = None
+        image_info = None
         try:
-            info = image.info["parameters"].split("\n")
-            positive_text = info[0]
-            negative_text = info[1]
-            params = info[2]
+            image_info = image.info["parameters"].strip()
+            info = image_info.split("\n")
+            positive_text = info[0].strip()
+            negative_text = info[1].strip()
+            if negative_text.startswith("Negative prompt"):
+                negative_text = negative_text[len("Negative prompt:"):].strip()
+            params = info[2].strip()
         except Exception as e:
             print(f"图片提取info信息出错，Maliooo_LoadImageFromUrl: {e}")
         
-        if info and len(info) == 3:
-            return (pil2tensor(image), positive_text, negative_text, params)
+        if image_info and len(info) == 3:
+            return (pil2tensor(image),image_info, positive_text, negative_text, params)
         else:
-            return (pil2tensor(image), None, None, None)
+            return (pil2tensor(image),None, None, None, None)
 
 
 
