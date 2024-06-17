@@ -61,12 +61,12 @@ def extract_info_from_webui_img(info:str):
                 }
             ]
         },
-        'loras': {
-            'lora_0': {
+        'loras': [
+            {
                 'lora_name': 'modernTeaRoom-20240515030539',
                 'lora_weight': 0.7
             }
-        },
+        ],
         'controlnets': [
             {
                 'Module': 'depth_leres++',
@@ -196,8 +196,8 @@ class Malio_Webui_Info_Params:
             }
         }
     
-    RETURN_TYPES = ("STRING", "STRING", "STRING", "INT", "CONTROL_INFOS")
-    RETURN_NAMES = ("positive_prompt", "negative_prompt", "params", "seed", "CONTROLNET_INFOS")
+    RETURN_TYPES = ("STRING", "STRING", "STRING", "INT", "CONTROL_INFOS", "LORA_INFOS")
+    RETURN_NAMES = ("positive_prompt", "negative_prompt", "params", "seed", "CONTROLNET_INFOS", "LORA_INFOS")
 
     FUNCTION = "get_webui_params_info"
 
@@ -205,6 +205,10 @@ class Malio_Webui_Info_Params:
 
     def get_webui_params_info(self, webui_params_info:str):
         """提取webui生成的图片信息"""
+
+        embeddings_file_paths = folder_paths.get_filename_list("embeddings")  # 本地的controlnet文件
+        # 去除后缀
+        embeddings_name_list = [item.split(".")[0] for item in embeddings_file_paths]
 
         # return {
         #     "positive_text": positive_text,
@@ -220,36 +224,18 @@ class Malio_Webui_Info_Params:
             params_dict = info_dict["params"]
             loras = info_dict["loras"]
             controlnets = info_dict["controlnets"]
+
+            # 替换embeddings, webui中的embeddings是不带embedding:前缀的, comfyui需要带前缀
+            for embed_name in embeddings_name_list:
+                if embed_name in negative_text:
+                    print(f"发现embeddings: {embed_name}")
+                    negative_text = negative_text.replace(embed_name, f"embedding:{embed_name}")
         except Exception as e:
             print(f"提取webui信息出错: {e}")
             return (None, None, None, None)
        
-        return (positive_text, negative_text, json.dumps(params_dict), int(params_dict["Seed"]), controlnets)
+        return (positive_text, negative_text, json.dumps(params_dict), int(params_dict["Seed"]), controlnets, loras)
 
-class Maliooo_Get_Process_Images:
-    """根据webui的生成信息，得到controlnet的预处理图片列表"""
-    controlnets = ["None"]
-
-    @classmethod
-    def INPUT_TYPES(cls):
-        return {
-            "required": {
-                    "controlnet_infos": ("CONTROL_INFOS",), 
-                },
-            "optional": {
-                    "process_list": (cls.controlnets,),
-                    #
-                }
-        }
-    RETURN_TYPES = ("IMAGE", "IMAGE", "IMAGE", ["hello"])
-    RETURN_NAMES = ("image1", "image2", "image3", "precess_list")
-    FUNCTION = "get_process_images"
-
-    CATEGORY = "conditioning"
-
-    def get_process_images(self, controlnet_infos, process_list):
-        controlnet_file_paths = folder_paths.get_filename_list("controlnet")  # 本地的controlnet文件
-        return (None, None, None, ["hello2"])
 
 class Maliooo_Get_Controlnet_Stack:
     @classmethod
@@ -274,8 +260,26 @@ class Maliooo_Get_Controlnet_Stack:
         for index, controlnet in enumerate(controlnet_infos):
             if index >= 3:  # 最多只能有3个controlnet
                 break
+
+            # ============= 提取controlnet的预处理器 =============
             preprocessor = controlnet["module"]  # 预处理器
-            preprocessor = WEBUI_2_COMFYUI_PREPROCESS.get(preprocessor, preprocessor)
+            if preprocessor in WEBUI_2_COMFYUI_PREPROCESS:
+                preprocessor = WEBUI_2_COMFYUI_PREPROCESS[preprocessor]
+            else:
+                flag = False
+                for key in WEBUI_2_COMFYUI_PREPROCESS.keys():
+                    if key in preprocessor:
+                        preprocessor = WEBUI_2_COMFYUI_PREPROCESS[key]
+                        flag = True
+                        break
+                if not flag:
+                    print(f"webui中controlnet预处理器找不到，不支持的预处理器: {preprocessor}")
+                    continue
+
+            if preprocessor not in WEBUI_2_COMFYUI_PREPROCESS.values():
+                print(f"webui中controlnet预处理器找不到，不支持的预处理器: {preprocessor}")
+                continue  # 跳过不支持的预处理器
+            
             controlnet_model_name = controlnet["model"].lower()
             if "ip-adapter" in controlnet_model_name:
                 continue # 跳过ip-adapter
@@ -311,3 +315,39 @@ class Maliooo_Get_Controlnet_Stack:
 
         #  return (controlnet_list) 如果只返回一个会出错，不知道为啥
         return (controlnet_list, show_help, imgs)  
+    
+
+class Maliooo_Get_Lora_Stack:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": 
+                {
+                    "lora_infos": ("LORA_INFOS",), 
+                }
+        }
+    RETURN_TYPES = ("LORA_STACK", "STRING")
+    RETURN_NAMES = ("loras_stack", "show_help")
+    # OUTPUT_IS_LIST = (False,False)
+    FUNCTION = "get_lora_stacks"
+
+    CATEGORY = "conditioning"
+
+    def get_lora_stacks(self, lora_infos):
+        loras_file_paths = folder_paths.get_filename_list("loras")  # 本地的controlnet文件
+        
+        loras_list = []
+        for index, lora_item in enumerate(lora_infos):
+            lora_clip_weight = 1.0
+            lora_name, lora_weight = lora_item["lora_name"], float(lora_item["lora_weight"])
+            
+            if f"{lora_name}.safetensors" in loras_file_paths:
+                lora_name = f"{lora_name}.safetensors"
+                loras_list.append((lora_name, lora_weight, lora_clip_weight))
+            else:
+                print(f"未找到webui生成信息中的 lora: {lora_name}")
+
+    
+        show_help = "显示帮助信息"
+
+        #  return (controlnet_list) 如果只返回一个会出错，不知道为啥
+        return (loras_list, show_help)  
