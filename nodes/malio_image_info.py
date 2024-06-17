@@ -226,11 +226,15 @@ class Malio_Webui_Info_Params:
 
 class Maliooo_Get_Process_Images:
     """根据webui的生成信息，得到controlnet的预处理图片列表"""
-    def INPUT_TYPES(s):
-        return {"required": 
-                {
+    controlnets = ["None"]
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
                     "controlnet_infos": ("CONTROL_INFOS",), 
-                    "process_list": (["hello"], )
+                },
+            "optional": {
+                    "controlnet_1": (cls.controlnets,),
+                    #
                 }
         }
     RETURN_TYPES = ("IMAGE", "IMAGE", "IMAGE", ["hello"])
@@ -239,7 +243,7 @@ class Maliooo_Get_Process_Images:
 
     CATEGORY = "conditioning"
 
-    def get_process_images(controlnet_infos, process_list):
+    def get_process_images(self, controlnet_infos, process_list):
         controlnet_file_paths = folder_paths.get_filename_list("controlnet")  # 本地的controlnet文件
         return (None, None, None, ["hello2"])
 
@@ -260,7 +264,7 @@ class Maliooo_Get_Controlnet_Stack:
 
     CATEGORY = "conditioning"
 
-    def get_controlnet_stacks(image1, image2, image3, controlnet_infos):
+    def get_controlnet_stacks(self, image1, image2, image3, controlnet_infos):
         image_list = [image1, image2, image3]
         controlnet_file_paths = folder_paths.get_filename_list("controlnet")  # 本地的controlnet文件
         controlnet_list = []
