@@ -2,6 +2,7 @@ import json
 import re
 import folder_paths
 from .controlnet import apply_preprocessor
+from .constant.preprocess import WEBUI_2_COMFYUI_PREPROCESS
 
 def extract_info_from_webui_img(info:str):
     """从webui 生成的img中提取信息"""
@@ -261,6 +262,7 @@ class Maliooo_Get_Controlnet_Stack:
         }
     RETURN_TYPES = ("CONTROL_NET_STACK", "STRING", "IMAGE")
     RETURN_NAMES = ("controlnet_stack", "show_help", "image")
+    OUTPUT_IS_LIST = (False,False,True)
     FUNCTION = "get_controlnet_stacks"
 
     CATEGORY = "conditioning"
@@ -272,22 +274,37 @@ class Maliooo_Get_Controlnet_Stack:
         for index, controlnet in enumerate(controlnet_infos):
             if index >= 3:  # 最多只能有3个controlnet
                 break
-            preprocessor = controlnet["Module"]  # 预处理器
-            pixel_perfect = controlnet["Pixel Perfect"]  # 是否完美像素
+            preprocessor = controlnet["module"]  # 预处理器
+            preprocessor = WEBUI_2_COMFYUI_PREPROCESS.get(preprocessor, preprocessor)
+            controlnet_model_name = controlnet["model"].lower()
+            if "ip-adapter" in controlnet_model_name:
+                continue # 跳过ip-adapter
+            pixel_perfect = controlnet["pixel perfect"]  # 是否完美像素
             if pixel_perfect.lower() == "false":
                 resolution = 512
+            
+            controlnet_model_name = controlnet["model"].lower()
+            if "[" in controlnet_model_name:
+                controlnet_model_name = controlnet_model_name.split("[")[0].strip()
 
             # 遍历从信息中提取得到的controlnet
             for controlnet_file_path in controlnet_file_paths:    # 遍历本地的controlnet文件
-                # controlnet_file_path 不要后缀
-                tmp_controlnet_file_path = controlnet_file_path.split(".")[0]
-                if tmp_controlnet_file_path.lower() in controlnet["model"].lower():
+
+
+                if controlnet_model_name in controlnet_file_path.lower():
                     # 获得controlnet的预处理器得到的预处理图片
                     preprocess_image = apply_preprocessor(image=image, preprocessor=preprocessor, resolution=resolution)
                     imgs.append(preprocess_image)
                     
                     # controlnet_list.extend([(controlnet_3, image_3, controlnet_strength_3, start_percent_3, end_percent_3)])
-                    controlnet_list.extend([controlnet_file_path, preprocess_image, float(controlnet["Weight"]), float(controlnet["Guidance Start"]), float(controlnet["Guidance End"])])
+                    controlnet_list.append(
+                        (controlnet_file_path, 
+                         preprocess_image, 
+                         float(controlnet["weight"]), 
+                         float(controlnet["guidance start"]), 
+                         float(controlnet["guidance end"])
+                         )
+                    )
                     break
 
         show_help = "显示帮助信息"

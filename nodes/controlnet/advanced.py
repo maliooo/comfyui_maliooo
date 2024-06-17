@@ -5,7 +5,7 @@ import folder_paths
 import comfy.sd
 import comfy.controlnet
 
-from ..utils import load_module
+from .utils import load_module
 
 custom_nodes = folder_paths.get_folder_paths("custom_nodes")
 advanced_cnet_dir_names = ["AdvancedControlNet", "ComfyUI-Advanced-ControlNet"]

@@ -30,6 +30,7 @@ def apply_preprocessor(image, preprocessor, resolution=512):
     if preprocessor not in control_net_preprocessors:
         raise Exception(f"Preprocessor {preprocessor} is not implemented")
 
+    # 传入类和参数
     preprocessor_class, default_args = control_net_preprocessors[preprocessor]
     default_args: List = default_args.copy()
 
