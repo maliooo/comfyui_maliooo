@@ -30,7 +30,7 @@ try:
     if module_path is None:
         raise Exception("Could not find ControlNetPreprocessors nodes")
 
-    module = load_module(module_path)
+    module = load_module(module_path)  # 得到custom_nodes 下comfyui_controlnet_aux 的 __init__.py 文件
     print("Loaded ControlNetPreprocessors nodes from", module_path)
 
 
@@ -40,7 +40,7 @@ try:
     if "CannyEdgePreprocessor" in nodes:
         control_net_preprocessors["canny"] = (
             nodes["CannyEdgePreprocessor"],
-            [100, 200],
+            [100, 200],  # 这里是除了image 和 resolusion 之外的其他参数
         )
     if "LineArtPreprocessor" in nodes:
         control_net_preprocessors["lineart"] = (

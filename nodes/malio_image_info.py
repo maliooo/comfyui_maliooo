@@ -201,7 +201,7 @@ class Malio_Webui_Info_Params:
 
     FUNCTION = "get_webui_params_info"
 
-    # CATEGORY = "🐼malio/webui/info"
+    # CATEGORY = "🐼malio/webui/info/根据info得到参数"
 
     def get_webui_params_info(self, webui_params_info:str):
         """提取webui生成的图片信息"""
@@ -251,7 +251,7 @@ class Maliooo_Get_Controlnet_Stack:
     OUTPUT_IS_LIST = (False,False,True)
     FUNCTION = "get_controlnet_stacks"
 
-    CATEGORY = "conditioning"
+    CATEGORY = "🐼malio/webui/info/构建controlnet_stack"
 
     def get_controlnet_stacks(self, image, controlnet_infos):
         controlnet_file_paths = folder_paths.get_filename_list("controlnet")  # 本地的controlnet文件
@@ -318,19 +318,20 @@ class Maliooo_Get_Controlnet_Stack:
     
 
 class Maliooo_Get_Lora_Stack:
+    """根据webui的生成信息info中提取到的lora信息，构建lora_stack列表"""
     @classmethod
     def INPUT_TYPES(s):
         return {"required": 
                 {
-                    "lora_infos": ("LORA_INFOS",), 
+                    "lora_infos": ("LORA_INFOS",),   # 输入类型
                 }
         }
-    RETURN_TYPES = ("LORA_STACK", "STRING")
+    RETURN_TYPES = ("LORA_STACK", "STRING")  # 返回类型
     RETURN_NAMES = ("loras_stack", "show_help")
     # OUTPUT_IS_LIST = (False,False)
     FUNCTION = "get_lora_stacks"
 
-    CATEGORY = "conditioning"
+    CATEGORY = "🐼malio/webui/info/构建lora_stack"
 
     def get_lora_stacks(self, lora_infos):
         loras_file_paths = folder_paths.get_filename_list("loras")  # 本地的controlnet文件
