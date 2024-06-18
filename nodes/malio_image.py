@@ -1,11 +1,15 @@
 import math
 from .components.fields import Field
 from .components.sizes import get_image_size
+import os
 from comfy.utils import common_upscale
+import torch
+import numpy as np
 import sys
 from PIL import Image, ImageOps
 import requests
 from .utils import pil2tensor
+import random
 
 scale_methods = ["nearest-exact", "bilinear", "bicubic", "bislerp", "area", "lanczos"]
 
@@ -190,7 +194,7 @@ class Maliooo_LoadImageFromUrl:
     RETURN_TYPES = ("IMAGE","STRING","STRING","STRING","STRING")
     RETURN_NAMES = ("IMAGE","image_info","positive_prompt", "negative_prompt", "params" )
     FUNCTION = "load"
-    CATEGORY = "mtb/IO"
+    CATEGORY = "🐼malio/image"
 
     def load(self, url):
         # get the image from the url
@@ -220,6 +224,61 @@ class Maliooo_LoadImageFromUrl:
 
 
 
+class Maliooo_LoadImageByPathSequence:
+    """参考二狗，单张顺序随机加载图片"""
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "dir_path": ("STRING", {}),
+            },
+            "optional": {
+                "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
+                "is_random": ("BOOLEAN", {"default": False}),
+            }
+        }
+    RETURN_TYPES = ('IMAGE', "STRING", "STRING", "STRING")
+    RETURN_NAMES = ("image", "image_path", "image_name", "image_info")
+    FUNCTION = "load_images_sequence"
+    CATEGORY = "🐼malio/image"
+    
+
+
+    def load_images_sequence(self, dir_path, seed, is_random=False):
+        """顺序加载文件夹中的图片，支持随机加载。 一张一张加载"""
+        try:
+            if os.path.isdir(dir_path):
+                image_path_list = []
+                for filename in os.listdir(dir_path):
+                    if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.webp')):
+                        _img_path = os.path.join(dir_path, filename)
+                        image_path_list.append(_img_path)
+                
+                image_path_list = sorted(image_path_list)
+                if is_random:  # 随机旋转
+                    selected_image_path = random.choice(image_path_list)
+                else:
+                    selected_image_path = image_path_list[seed % len(image_path_list)]
+                
+
+                image = Image.open(selected_image_path).convert('RGBA')
+                image_info = ""
+                try:
+                    image_info = image.info["parameters"].strip()
+                except Exception as e:
+                    print(f"图片提取info信息出错，Maliooo_LoadImageByPathSequence: {e}")
+                    
+                image = ImageOps.exif_transpose(image)  # 旋转图片
+                image_tensor = pil2tensor(image)
+                    
+                selected_image_name = os.path.basename(selected_image_path)
+
+                
+                return (image_tensor, selected_image_path, selected_image_name, image_info)
+        
+        except Exception as e:
+            print(f"2🐕温馨提示处理图像时出错请重置节点：{e}")
+            return (None, None, None, None)
 
         
         

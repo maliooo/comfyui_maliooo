@@ -40,13 +40,13 @@ class Malio_CheckpointLoaderSimple:
             },
         }
 
-    RETURN_TYPES = ("MODEL", "CLIP", "VAE")
+    RETURN_TYPES = ("MODEL", "CLIP", "VAE", "STRING")
+    RETURN_NAMES = ("model", "clip", "vae", "model_path")
     FUNCTION = "load_checkpoint"
 
     CATEGORY = "🐼malio/loaders"
 
     def load_checkpoint(self, ckpt_name, override):
-        ckpt_path = folder_paths.get_full_path("checkpoints", ckpt_name)
 
         if override:  # 如果有override，就用override
             checkpoint_names = folder_paths.get_filename_list("checkpoints")  # 本地的controlnet文件
@@ -56,15 +56,16 @@ class Malio_CheckpointLoaderSimple:
                     for _suffix in ["safetensors", "ckpt", "pth"]:
                         if (override + "." + _suffix) in checkpoint_names:
                             ckpt_name = override + "." + _suffix
+                            print(f"override覆盖模型为: {ckpt_name}")
                             break
-
+        ckpt_path = folder_paths.get_full_path("checkpoints", ckpt_name)
         out = comfy.sd.load_checkpoint_guess_config(
             ckpt_path,
             output_vae=True,
             output_clip=True,
             embedding_directory=folder_paths.get_folder_paths("embeddings"),
         )
-        return out[:3]
+        return (out[0], out[1], out[2], ckpt_path)
 
 
 class Malio_LoadImage:
@@ -78,8 +79,8 @@ class Malio_LoadImage:
 
     CATEGORY = "🐼malio/image"
 
-    RETURN_TYPES = ("IMAGE", "MASK", "STRING")
-    RETURN_NAMES = ("image", "mask", "image_name")
+    RETURN_TYPES = ("IMAGE", "MASK", "STRING", "STRING")
+    RETURN_NAMES = ("image", "mask", "image_name", "image_info")
     FUNCTION = "load_image"
     def load_image(self, image):
         image_path = folder_paths.get_annotated_filepath(image)
@@ -126,4 +127,10 @@ class Malio_LoadImage:
         # 获得图片名
         image_name = os.path.basename(image_path)
 
-        return (output_image, output_mask, image_name)
+        image_info = ""
+        try:
+            image_info = img.info["parameters"].strip()
+        except Exception as e:
+            print(f"图片提取info信息出错，Malio_LoadImage: {e}")
+
+        return (output_image, output_mask, image_name, image_info)

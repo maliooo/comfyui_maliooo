@@ -152,7 +152,7 @@ def extract_info_from_webui_img(info:str):
     for item in other_params.split(","):
         item = item.strip()
         key, value = item.split(":")
-        key = key.strip()
+        key = key.strip().lower()
         value = value.strip()
         params_dict[key] = value
     
@@ -176,6 +176,7 @@ def extract_info_from_webui_img(info:str):
     if len(ti_hashes) > 0:
         params_dict["TI hashes"] = ti_hashes[0]
 
+
     return {
         "positive_text": positive_text,
         "negative_text": negative_text,
@@ -196,8 +197,8 @@ class Malio_Webui_Info_Params:
             }
         }
     
-    RETURN_TYPES = ("STRING", "STRING", "STRING", "INT", "CONTROL_INFOS", "LORA_INFOS")
-    RETURN_NAMES = ("positive_prompt", "negative_prompt", "params", "seed", "CONTROLNET_INFOS", "LORA_INFOS")
+    RETURN_TYPES = ("STRING", "STRING", "STRING", "INT", "CONTROL_INFOS", "LORA_INFOS", "STRING")
+    RETURN_NAMES = ("positive_prompt", "negative_prompt", "params", "seed", "CONTROLNET_INFOS", "LORA_INFOS", "checkpoint_name")
 
     FUNCTION = "get_webui_params_info"
 
@@ -224,6 +225,8 @@ class Malio_Webui_Info_Params:
             params_dict = info_dict["params"]
             loras = info_dict["loras"]
             controlnets = info_dict["controlnets"]
+            # 提取checkpoint_name
+            checkpoint_name = params_dict.get("model", "")
 
             # 替换embeddings, webui中的embeddings是不带embedding:前缀的, comfyui需要带前缀
             for embed_name in embeddings_name_list:
@@ -232,9 +235,9 @@ class Malio_Webui_Info_Params:
                     negative_text = negative_text.replace(embed_name, f"embedding:{embed_name}")
         except Exception as e:
             print(f"提取webui信息出错: {e}")
-            return (None, None, None, None)
+            return (None, None, None, None, None, None, None)
        
-        return (positive_text, negative_text, json.dumps(params_dict), int(params_dict["Seed"]), controlnets, loras)
+        return (positive_text, negative_text, json.dumps(params_dict), int(params_dict["seed"]), controlnets, loras, checkpoint_name)
 
 
 class Maliooo_Get_Controlnet_Stack:
