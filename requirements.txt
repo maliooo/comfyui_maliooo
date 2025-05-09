@@ -1,1 +1,2 @@
-tf-keras
+# tf-keras
+# easyocr

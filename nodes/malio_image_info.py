@@ -1,188 +1,189 @@
 import json
-import re
 import folder_paths
 from .controlnet import apply_preprocessor
 from .constant.preprocess import WEBUI_2_COMFYUI_PREPROCESS
+from .utils import extract_info_from_webui_img
 
-def extract_info_from_webui_img(info:str):
-    """从webui 生成的img中提取信息"""
+# def extract_info_from_webui_img(info:str):
+#     """从webui 生成的img中提取信息"""
 
-    """
-    输入示例:
-    Modern,Tea Room,Modern interior design,<lora:modernTeaRoom-20240515030539:0.7>,8k uhd,dslr,soft lighting,high quality,film grain,Fujifilm XT3
-    Negative prompt: naked,people, overweight color,big Blue,big red, distorted,ugly,worst quality,painting,sketch,(worst quality, low quality:1.4),poor anatomy,watermark,text,signature,blurry,messy,Bad Artist Sketch,(Semi-Realistic, Sketch, Cartoon, Drawing, Anime:1.4),Cropped,Out of Frame,Artifacts,Low resolution,bad anatomy,text,(mutation, bad drawing:1.2),obese,bad proportions,animals,low quality,watermark,signature,blurred,worst quality,(nsfw:1.2),realisticvision-negative-embedding
-    Steps: 20, Sampler: DPM++ 2M Karras, CFG scale: 7.0, Seed: 804722363, Size: 1536x1152, Model hash: e6415c4892, Model: Realistic_Vision_V2.0, VAE hash: c6a580b13a, VAE: vae-ft-mse-840000-ema-pruned.ckpt, Denoising strength: 0, ControlNet 0: "Module: depth_leres++, Model: control_v11f1p_sd15_depth [cfd03158], Weight: 0.4, Resize Mode: 1, Low Vram: False, Guidance Start: 0, Guidance End: 0.4, Pixel Perfect: False, Control Mode: 0, Save Detected Map: True", ControlNet 1: "Module: lineart_realistic, Model: control_v11p_sd15_lineart [43d4be0d], Weight: 0.7, Resize Mode: 1, Low Vram: False, Processor Res: 512, Guidance Start: 0.0, Guidance End: 0.8, Pixel Perfect: False, Control Mode: 0, Save Detected Map: True", Lora hashes: "modernTeaRoom-20240515030539: 7163f2e3ce2f", TI hashes: "realisticvision-negative-embedding: 5511b02e263f", Version: v1.6.0
+#     """
+#     输入示例:
+#     Modern,Tea Room,Modern interior design,<lora:modernTeaRoom-20240515030539:0.7>,8k uhd,dslr,soft lighting,high quality,film grain,Fujifilm XT3
+#     Negative prompt: naked,people, overweight color,big Blue,big red, distorted,ugly,worst quality,painting,sketch,(worst quality, low quality:1.4),poor anatomy,watermark,text,signature,blurry,messy,Bad Artist Sketch,(Semi-Realistic, Sketch, Cartoon, Drawing, Anime:1.4),Cropped,Out of Frame,Artifacts,Low resolution,bad anatomy,text,(mutation, bad drawing:1.2),obese,bad proportions,animals,low quality,watermark,signature,blurred,worst quality,(nsfw:1.2),realisticvision-negative-embedding
+#     Steps: 20, Sampler: DPM++ 2M Karras, CFG scale: 7.0, Seed: 804722363, Size: 1536x1152, Model hash: e6415c4892, Model: Realistic_Vision_V2.0, VAE hash: c6a580b13a, VAE: vae-ft-mse-840000-ema-pruned.ckpt, Denoising strength: 0, ControlNet 0: "Module: depth_leres++, Model: control_v11f1p_sd15_depth [cfd03158], Weight: 0.4, Resize Mode: 1, Low Vram: False, Guidance Start: 0, Guidance End: 0.4, Pixel Perfect: False, Control Mode: 0, Save Detected Map: True", ControlNet 1: "Module: lineart_realistic, Model: control_v11p_sd15_lineart [43d4be0d], Weight: 0.7, Resize Mode: 1, Low Vram: False, Processor Res: 512, Guidance Start: 0.0, Guidance End: 0.8, Pixel Perfect: False, Control Mode: 0, Save Detected Map: True", Lora hashes: "modernTeaRoom-20240515030539: 7163f2e3ce2f", TI hashes: "realisticvision-negative-embedding: 5511b02e263f", Version: v1.6.0
     
-    输出示例:
-    {
-        'params': {
-            'prompt': 'Modern,Tea Room,Modern interior design,<lora:modernTeaRoom-20240515030539:0.7>,8k uhd,dslr,soft lighting,high quality,film grain,Fujifilm XT3',
-            'negative_prompt': 'naked,people, overweight color,big Blue,big red, distorted,ugly,worst quality,painting,sketch,(worst quality, low quality:1.4),poor anatomy,watermark,text,signature,blurry,messy,Bad Artist Sketch,(Semi-Realistic, Sketch, Cartoon, Drawing, Anime:1.4),Cropped,Out of Frame,Artifacts,Low resolution,bad anatomy,text,(mutation, bad drawing:1.2),obese,bad proportions,animals,low quality,watermark,signature,blurred,worst quality,(nsfw:1.2),realisticvision-negative-embedding',
-            'Steps': '20',
-            'Sampler': 'DPM++ 2M Karras',
-            'CFG scale': '7.0',
-            'Seed': '804722363',
-            'Size': '1536x1152',
-            'Model hash': 'e6415c4892',
-            'Model': 'Realistic_Vision_V2.0',
-            'VAE hash': 'c6a580b13a',
-            'VAE': 'vae-ft-mse-840000-ema-pruned.ckpt',
-            'Denoising strength': '0',
-            'ControlNet 0': '""',
-            'ControlNet 1': '""',
-            'Lora hashes': 'modernTeaRoom-20240515030539: 7163f2e3ce2f',
-            'TI hashes': 'realisticvision-negative-embedding: 5511b02e263f',
-            'Version': 'v1.6.0',
-            'controlnets': [
-                {
-                    'Module': 'depth_leres++',
-                    'Model': 'control_v11f1p_sd15_depth [cfd03158]',
-                    'Weight': '0.4',
-                    'Resize Mode': '1',
-                    'Low Vram': 'False',
-                    'Guidance Start': '0',
-                    'Guidance End': '0.4',
-                    'Pixel Perfect': 'False',
-                    'Control Mode': '0',
-                    'Save Detected Map': 'True'
-                },
-                {
-                    'Module': 'lineart_realistic',
-                    'Model': 'control_v11p_sd15_lineart [43d4be0d]',
-                    'Weight': '0.7',
-                    'Resize Mode': '1',
-                    'Low Vram': 'False',
-                    'Processor Res': '512',
-                    'Guidance Start': '0.0',
-                    'Guidance End': '0.8',
-                    'Pixel Perfect': 'False',
-                    'Control Mode': '0',
-                    'Save Detected Map': 'True'
-                }
-            ]
-        },
-        'loras': [
-            {
-                'lora_name': 'modernTeaRoom-20240515030539',
-                'lora_weight': 0.7
-            }
-        ],
-        'controlnets': [
-            {
-                'Module': 'depth_leres++',
-                'Model': 'control_v11f1p_sd15_depth [cfd03158]',
-                'Weight': '0.4',
-                'Resize Mode': '1',
-                'Low Vram': 'False',
-                'Guidance Start': '0',
-                'Guidance End': '0.4',
-                'Pixel Perfect': 'False',
-                'Control Mode': '0',
-                'Save Detected Map': 'True'},
-            {
-                'Module': 'lineart_realistic',
-                'Model': 'control_v11p_sd15_lineart [43d4be0d]',
-                'Weight': '0.7',
-                'Resize Mode': '1',
-                'Low Vram': 'False',
-                'Processor Res': '512',
-                'Guidance Start': '0.0',
-                'Guidance End': '0.8',
-                'Pixel Perfect': 'False',
-                'Control Mode': '0',
-                'Save Detected Map': 'True'}
-        ]
-    }
+#     输出示例:
+#     {
+#         'params': {
+#             'prompt': 'Modern,Tea Room,Modern interior design,<lora:modernTeaRoom-20240515030539:0.7>,8k uhd,dslr,soft lighting,high quality,film grain,Fujifilm XT3',
+#             'negative_prompt': 'naked,people, overweight color,big Blue,big red, distorted,ugly,worst quality,painting,sketch,(worst quality, low quality:1.4),poor anatomy,watermark,text,signature,blurry,messy,Bad Artist Sketch,(Semi-Realistic, Sketch, Cartoon, Drawing, Anime:1.4),Cropped,Out of Frame,Artifacts,Low resolution,bad anatomy,text,(mutation, bad drawing:1.2),obese,bad proportions,animals,low quality,watermark,signature,blurred,worst quality,(nsfw:1.2),realisticvision-negative-embedding',
+#             'Steps': '20',
+#             'Sampler': 'DPM++ 2M Karras',
+#             'CFG scale': '7.0',
+#             'Seed': '804722363',
+#             'Size': '1536x1152',
+#             'Model hash': 'e6415c4892',
+#             'Model': 'Realistic_Vision_V2.0',
+#             'VAE hash': 'c6a580b13a',
+#             'VAE': 'vae-ft-mse-840000-ema-pruned.ckpt',
+#             'Denoising strength': '0',
+#             'ControlNet 0': '""',
+#             'ControlNet 1': '""',
+#             'Lora hashes': 'modernTeaRoom-20240515030539: 7163f2e3ce2f',
+#             'TI hashes': 'realisticvision-negative-embedding: 5511b02e263f',
+#             'Version': 'v1.6.0',
+#             'controlnets': [
+#                 {
+#                     'Module': 'depth_leres++',
+#                     'Model': 'control_v11f1p_sd15_depth [cfd03158]',
+#                     'Weight': '0.4',
+#                     'Resize Mode': '1',
+#                     'Low Vram': 'False',
+#                     'Guidance Start': '0',
+#                     'Guidance End': '0.4',
+#                     'Pixel Perfect': 'False',
+#                     'Control Mode': '0',
+#                     'Save Detected Map': 'True'
+#                 },
+#                 {
+#                     'Module': 'lineart_realistic',
+#                     'Model': 'control_v11p_sd15_lineart [43d4be0d]',
+#                     'Weight': '0.7',
+#                     'Resize Mode': '1',
+#                     'Low Vram': 'False',
+#                     'Processor Res': '512',
+#                     'Guidance Start': '0.0',
+#                     'Guidance End': '0.8',
+#                     'Pixel Perfect': 'False',
+#                     'Control Mode': '0',
+#                     'Save Detected Map': 'True'
+#                 }
+#             ]
+#         },
+#         'loras': [
+#             {
+#                 'lora_name': 'modernTeaRoom-20240515030539',
+#                 'lora_weight': 0.7
+#             }
+#         ],
+#         'controlnets': [
+#             {
+#                 'Module': 'depth_leres++',
+#                 'Model': 'control_v11f1p_sd15_depth [cfd03158]',
+#                 'Weight': '0.4',
+#                 'Resize Mode': '1',
+#                 'Low Vram': 'False',
+#                 'Guidance Start': '0',
+#                 'Guidance End': '0.4',
+#                 'Pixel Perfect': 'False',
+#                 'Control Mode': '0',
+#                 'Save Detected Map': 'True'},
+#             {
+#                 'Module': 'lineart_realistic',
+#                 'Model': 'control_v11p_sd15_lineart [43d4be0d]',
+#                 'Weight': '0.7',
+#                 'Resize Mode': '1',
+#                 'Low Vram': 'False',
+#                 'Processor Res': '512',
+#                 'Guidance Start': '0.0',
+#                 'Guidance End': '0.8',
+#                 'Pixel Perfect': 'False',
+#                 'Control Mode': '0',
+#                 'Save Detected Map': 'True'}
+#         ]
+#     }
 
-    """
+#     """
 
-    assert isinstance(info, str), "info 类型错误"
-    assert info is not None, "info 不能为空"
-    assert len(info.split("\n")) == 3, "info 格式错误, 请检查, 分隔后长度应为3"
+#     assert isinstance(info, str), "info 类型错误"
+#     assert info is not None, "info 不能为空"
+#     assert len(info.split("\n")) == 3, "info 格式错误, 请检查, 分隔后长度应为3"
 
-    params_dict = {}  # 构建参数字典
-    # lora_dict = {}
-    loras = []
-    info = info.split("\n")
+#     params_dict = {}  # 构建参数字典
+#     # lora_dict = {}
+#     loras = []
+#     info = info.split("\n")
 
-    # 1. 正向提示词
-    # Japanese,Tea Room,<lora:japaneseTeaRoom-20240515053604:0.7>,8k uhd,dslr,soft lighting,high quality,film grain,Fujifilm XT3
-    positive_text = info[0].strip()
-    params_dict["prompt"] = positive_text
-    # 提取lora, <lora:xxx>
-    lora_list = re.findall(r"<lora:(.*?)>", positive_text)
-    for i in lora_list:
-        positive_text = positive_text.replace(f"<lora:{i}>", "")
-    for index, item in enumerate(lora_list):
-        _tmp_lora_dict = {}
-        lora_name, lora_weight = item.split(":")
-        lora_name = lora_name.strip()
-        lora_weight = eval(lora_weight.strip())
-        _tmp_lora_dict["lora_name"] = lora_name
-        _tmp_lora_dict["lora_weight"] = lora_weight
-        # lora_dict[f"lora_{index}"] = _tmp_lora_dict
-        loras.append(_tmp_lora_dict)
+#     # 1. 正向提示词
+#     # Japanese,Tea Room,<lora:japaneseTeaRoom-20240515053604:0.7>,8k uhd,dslr,soft lighting,high quality,film grain,Fujifilm XT3
+#     positive_text = info[0].strip()
+#     params_dict["prompt"] = positive_text
+#     # 提取lora, <lora:xxx>
+#     lora_list = re.findall(r"<lora:(.*?)>", positive_text)
+#     for i in lora_list:
+#         positive_text = positive_text.replace(f"<lora:{i}>", "")
+#     for index, item in enumerate(lora_list):
+#         _tmp_lora_dict = {}
+#         lora_name, lora_weight = item.split(":")
+#         lora_name = lora_name.strip()
+#         lora_weight = eval(lora_weight.strip())
+#         _tmp_lora_dict["lora_name"] = lora_name
+#         _tmp_lora_dict["lora_weight"] = lora_weight
+#         # lora_dict[f"lora_{index}"] = _tmp_lora_dict
+#         loras.append(_tmp_lora_dict)
 
-    # 2. 反向提示词
-    negative_text = info[1].strip()
-    if negative_text.startswith("Negative prompt"):
-        negative_text = negative_text[len("Negative prompt:"):].strip()
-    params_dict["negative_prompt"] = negative_text
-    # Negative prompt: naked,people, overweight color,big Blue,big red, distorted,ugly,worst quality,painting,sketch,(worst quality, low quality:1.4),poor anatomy,watermark,text,signature,blurry,messy,Bad Artist Sketch,(Semi-Realistic, Sketch, Cartoon, Drawing, Anime:1.4),Cropped,Out of Frame,Artifacts,Low resolution,bad anatomy,text,(mutation, bad drawing:1.2),obese,bad proportions,animals,low quality,watermark,signature,blurred,worst quality,(nsfw:1.2),realisticvision-negative-embedding
+#     # 2. 反向提示词
+#     negative_text = info[1].strip()
+#     if negative_text.startswith("Negative prompt"):
+#         negative_text = negative_text[len("Negative prompt:"):].strip()
+#     params_dict["negative_prompt"] = negative_text
+#     # Negative prompt: naked,people, overweight color,big Blue,big red, distorted,ugly,worst quality,painting,sketch,(worst quality, low quality:1.4),poor anatomy,watermark,text,signature,blurry,messy,Bad Artist Sketch,(Semi-Realistic, Sketch, Cartoon, Drawing, Anime:1.4),Cropped,Out of Frame,Artifacts,Low resolution,bad anatomy,text,(mutation, bad drawing:1.2),obese,bad proportions,animals,low quality,watermark,signature,blurred,worst quality,(nsfw:1.2),realisticvision-negative-embedding
 
-    # 3. 其他参数
-    # Steps: 20, Sampler: DPM++ 2M Karras, CFG scale: 7.0, Seed: 3086231368, Size: 1536x1152, Model hash: e6415c4892, Model: Realistic_Vision_V2.0, VAE hash: c6a580b13a, VAE: vae-ft-mse-840000-ema-pruned.ckpt, Denoising strength: 0, ControlNet 0: "Module: depth_leres++, Model: control_v11f1p_sd15_depth [cfd03158], Weight: 0.4, Resize Mode: 1, Low Vram: False, Guidance Start: 0, Guidance End: 0.4, Pixel Perfect: False, Control Mode: 0, Save Detected Map: True", ControlNet 1: "Module: lineart_realistic, Model: control_v11p_sd15_lineart [43d4be0d], Weight: 0.7, Resize Mode: 1, Low Vram: False, Processor Res: 512, Guidance Start: 0.0, Guidance End: 0.8, Pixel Perfect: False, Control Mode: 0, Save Detected Map: True", Lora hashes: "japaneseTeaRoom-20240515053604: 9a9a36611610", TI hashes: "realisticvision-negative-embedding: 5511b02e263f", Version: v1.6.0
-    # 提取ControlNet 0, ControlNet 1, Lora hashes, TI hashes
-    other_params = info[2].strip()
+#     # 3. 其他参数
+#     # Steps: 20, Sampler: DPM++ 2M Karras, CFG scale: 7.0, Seed: 3086231368, Size: 1536x1152, Model hash: e6415c4892, Model: Realistic_Vision_V2.0, VAE hash: c6a580b13a, VAE: vae-ft-mse-840000-ema-pruned.ckpt, Denoising strength: 0, ControlNet 0: "Module: depth_leres++, Model: control_v11f1p_sd15_depth [cfd03158], Weight: 0.4, Resize Mode: 1, Low Vram: False, Guidance Start: 0, Guidance End: 0.4, Pixel Perfect: False, Control Mode: 0, Save Detected Map: True", ControlNet 1: "Module: lineart_realistic, Model: control_v11p_sd15_lineart [43d4be0d], Weight: 0.7, Resize Mode: 1, Low Vram: False, Processor Res: 512, Guidance Start: 0.0, Guidance End: 0.8, Pixel Perfect: False, Control Mode: 0, Save Detected Map: True", Lora hashes: "japaneseTeaRoom-20240515053604: 9a9a36611610", TI hashes: "realisticvision-negative-embedding: 5511b02e263f", Version: v1.6.0
+#     # 提取ControlNet 0, ControlNet 1, Lora hashes, TI hashes
+#     other_params = info[2].strip()
 
-    # 提取ControlNet, Lora hashes, TI hashes
-    control_net_list = re.findall(r'ControlNet \d: "(.*?)"', other_params)
-    lora_hashes = re.findall(r'Lora hashes: "(.*?)"', other_params)
-    ti_hashes = re.findall(r'TI hashes: "(.*?)"', other_params)
+#     # 提取ControlNet, Lora hashes, TI hashes
+#     control_net_list = re.findall(r'ControlNet \d: "(.*?)"', other_params)
+#     lora_hashes = re.findall(r'Lora hashes: "(.*?)"', other_params)
+#     ti_hashes = re.findall(r'TI hashes: "(.*?)"', other_params)
 
-    # 去除other_params字符串中的，ControlNet, Lora hashes, TI hashes
-    for i in control_net_list:
-        other_params = other_params.replace(i, "")
-    for i in lora_hashes:
-        other_params = other_params.replace(i, "")
-    for i in ti_hashes:
-        other_params = other_params.replace(i, "")
+#     # 去除other_params字符串中的，ControlNet, Lora hashes, TI hashes
+#     for i in control_net_list:
+#         other_params = other_params.replace(i, "")
+#     for i in lora_hashes:
+#         other_params = other_params.replace(i, "")
+#     for i in ti_hashes:
+#         other_params = other_params.replace(i, "")
 
-    # 提取其他参数
-    for item in other_params.split(","):
-        item = item.strip()
-        key, value = item.split(":")
-        key = key.strip()
-        value = value.strip()
-        params_dict[key] = value
+#     # 提取其他参数
+#     for item in other_params.split(","):
+#         item = item.strip()
+#         key, value = item.split(":")
+#         key = key.strip().lower()
+#         value = value.strip()
+#         params_dict[key] = value
     
-    # 提取ControlNet
-    params_dict["controlnets"] = []
-    for index, controlnet in enumerate(control_net_list):
-        controlnet_dict = {}
-        for item in controlnet.split(","):
-            item = item.strip()
-            key, value = item.split(":")
-            key = key.strip()
-            value = value.strip()
-            controlnet_dict[key] = value
+#     # 提取ControlNet
+#     params_dict["controlnets"] = []
+#     for index, controlnet in enumerate(control_net_list):
+#         controlnet_dict = {}
+#         for item in controlnet.split(","):
+#             item = item.strip()
+#             key, value = item.split(":")
+#             key = key.strip()
+#             value = value.strip()
+#             controlnet_dict[key] = value
 
-        controlnet_dict = {k.lower():v for k,v in controlnet_dict.items()}  # 转小写
-        params_dict["controlnets"].append(controlnet_dict)
+#         controlnet_dict = {k.lower():v for k,v in controlnet_dict.items()}  # 转小写
+#         params_dict["controlnets"].append(controlnet_dict)
 
-    # 添加Lora hashes, TI hashes
-    if len(lora_hashes) > 0:
-        params_dict["Lora hashes"] = lora_hashes[0]
-    if len(ti_hashes) > 0:
-        params_dict["TI hashes"] = ti_hashes[0]
+#     # 添加Lora hashes, TI hashes
+#     if len(lora_hashes) > 0:
+#         params_dict["Lora hashes"] = lora_hashes[0]
+#     if len(ti_hashes) > 0:
+#         params_dict["TI hashes"] = ti_hashes[0]
 
-    return {
-        "positive_text": positive_text,
-        "negative_text": negative_text,
-        "params": params_dict,
-        "loras" : loras,
-        "controlnets": params_dict["controlnets"]
-    }
+
+#     return {
+#         "positive_text": positive_text,
+#         "negative_text": negative_text,
+#         "params": params_dict,
+#         "loras" : loras,
+#         "controlnets": params_dict["controlnets"]
+#     }
 
 class Malio_Webui_Info_Params:
     def __init__(self) -> None:
@@ -196,12 +197,12 @@ class Malio_Webui_Info_Params:
             }
         }
     
-    RETURN_TYPES = ("STRING", "STRING", "STRING", "INT", "CONTROL_INFOS", "LORA_INFOS")
-    RETURN_NAMES = ("positive_prompt", "negative_prompt", "params", "seed", "CONTROLNET_INFOS", "LORA_INFOS")
+    RETURN_TYPES = ("STRING", "STRING", "STRING", "INT", "CONTROL_INFOS", "LORA_INFOS", "STRING", "STRING")
+    RETURN_NAMES = ("positive_prompt", "negative_prompt", "params", "seed", "CONTROLNET_INFOS", "LORA_INFOS", "checkpoint_name", "negative_text_no_embedding")
 
     FUNCTION = "get_webui_params_info"
 
-    # CATEGORY = "🐼malio/webui/info/根据info得到参数"
+    # CATEGORY = "🐼malio/webui/info"
 
     def get_webui_params_info(self, webui_params_info:str):
         """提取webui生成的图片信息"""
@@ -218,23 +219,30 @@ class Malio_Webui_Info_Params:
         #     "controlnets": params_dict["controlnets"]
         # }
         try:
-            info_dict = extract_info_from_webui_img(webui_params_info)
+            info_dict = extract_info_from_webui_img(webui_params_info.strip())
             positive_text = info_dict["positive_text"]
             negative_text = info_dict["negative_text"]
+            negative_text_no_embedding = info_dict["negative_text"]
             params_dict = info_dict["params"]
             loras = info_dict["loras"]
             controlnets = info_dict["controlnets"]
+            # 提取checkpoint_name
+            checkpoint_name = params_dict.get("model", "")
 
             # 替换embeddings, webui中的embeddings是不带embedding:前缀的, comfyui需要带前缀
             for embed_name in embeddings_name_list:
                 if embed_name in negative_text:
                     print(f"发现embeddings: {embed_name}")
-                    negative_text = negative_text.replace(embed_name, f"embedding:{embed_name}")
+                    negative_text = negative_text.replace(embed_name, f" embedding:{embed_name} ")
+                    # 去除embeddings
+                    negative_text_no_embedding = negative_text_no_embedding.replace(embed_name, "")
         except Exception as e:
             print(f"提取webui信息出错: {e}")
-            return (None, None, None, None)
-       
-        return (positive_text, negative_text, json.dumps(params_dict), int(params_dict["Seed"]), controlnets, loras)
+            return (None) * len(self.RETURN_TYPES)
+
+        print(f"提取的controlnet: {controlnets}")
+        print(f"提取的lora: {loras}")
+        return (positive_text, negative_text, json.dumps(params_dict), int(params_dict["seed"]), controlnets, loras, checkpoint_name, negative_text_no_embedding)
 
 
 class Maliooo_Get_Controlnet_Stack:
@@ -244,6 +252,7 @@ class Maliooo_Get_Controlnet_Stack:
                 {
                     "image": ("IMAGE",),
                     "controlnet_infos": ("CONTROL_INFOS",), 
+                    "resolution": ("INT", {"default": 512})
                 }
         }
     RETURN_TYPES = ("CONTROL_NET_STACK", "STRING", "IMAGE")
@@ -251,9 +260,9 @@ class Maliooo_Get_Controlnet_Stack:
     OUTPUT_IS_LIST = (False,False,True)
     FUNCTION = "get_controlnet_stacks"
 
-    CATEGORY = "🐼malio/webui/info/构建controlnet_stack"
+    CATEGORY = "🐼malio/webui/info"
 
-    def get_controlnet_stacks(self, image, controlnet_infos):
+    def get_controlnet_stacks(self, image, controlnet_infos, resolution=512):
         controlnet_file_paths = folder_paths.get_filename_list("controlnet")  # 本地的controlnet文件
         controlnet_list = []
         imgs = []
@@ -282,10 +291,8 @@ class Maliooo_Get_Controlnet_Stack:
             
             controlnet_model_name = controlnet["model"].lower()
             if "ip-adapter" in controlnet_model_name:
+                print(f"ip-adapter模型不支持: {controlnet_model_name}")
                 continue # 跳过ip-adapter
-            pixel_perfect = controlnet["pixel perfect"]  # 是否完美像素
-            if pixel_perfect.lower() == "false":
-                resolution = 512
             
             controlnet_model_name = controlnet["model"].lower()
             if "[" in controlnet_model_name:
@@ -296,8 +303,14 @@ class Maliooo_Get_Controlnet_Stack:
 
 
                 if controlnet_model_name in controlnet_file_path.lower():
+                    pixel_perfect = controlnet["pixel perfect"]  # 是否完美像素
+                    if pixel_perfect.lower() == "true":
+                        temp_resolution = resolution
+                    else:
+                        temp_resolution = 512
                     # 获得controlnet的预处理器得到的预处理图片
-                    preprocess_image = apply_preprocessor(image=image, preprocessor=preprocessor, resolution=resolution)
+                    print(f"找到controlnet: {controlnet_model_name},resolution: {temp_resolution},  使用预处理器: {preprocessor}, pixel_perfect: {pixel_perfect}, controlnet_file_path: {controlnet_file_path}")
+                    preprocess_image = apply_preprocessor(image=image, preprocessor=preprocessor, resolution=temp_resolution)
                     imgs.append(preprocess_image)
                     
                     # controlnet_list.extend([(controlnet_3, image_3, controlnet_strength_3, start_percent_3, end_percent_3)])
@@ -331,14 +344,14 @@ class Maliooo_Get_Lora_Stack:
     # OUTPUT_IS_LIST = (False,False)
     FUNCTION = "get_lora_stacks"
 
-    CATEGORY = "🐼malio/webui/info/构建lora_stack"
+    CATEGORY = "🐼malio/webui/info"
 
     def get_lora_stacks(self, lora_infos):
         loras_file_paths = folder_paths.get_filename_list("loras")  # 本地的controlnet文件
         
         loras_list = []
         for index, lora_item in enumerate(lora_infos):
-            lora_clip_weight = 1.0
+            lora_clip_weight = float(lora_item["lora_weight"])
             lora_name, lora_weight = lora_item["lora_name"], float(lora_item["lora_weight"])
             
             if f"{lora_name}.safetensors" in loras_file_paths:
@@ -351,4 +364,24 @@ class Maliooo_Get_Lora_Stack:
         show_help = "显示帮助信息"
 
         #  return (controlnet_list) 如果只返回一个会出错，不知道为啥
-        return (loras_list, show_help)  
+        return (loras_list, show_help)
+    
+
+
+if __name__ == "__main__":
+    webui_params_info = """
+Modern,Multistoreyhous,blue sky as background,high details,masterpiece,highres,besIt quality,photo realistic,hyper detailed photo,LAOWANG,Nightscape lighting,modern architectural lighting,light and shadow effect,glass curtain wall reflection,urban nightscape atmosphere,lighting hierarchy,architectural light,ground lighting design,night landscape lighting,artistic architectural nightscape,<lora:ModernStyleMultistoryResidentialBuilding-20240629205654:0.9>
+Negative prompt: naked,people, overweight color,big Blue,big red,distorted,ugly,worst quality,painting,sketch,(worst quality, low quality:1.4),poor anatomy,watermark,text,signature,blurry,messy,Bad Artist Sketch,(Semi-Realistic, Sketch, Cartoon, Drawing, Anime:1.4),Cropped,Out of Frame,Artifacts,Low resolution,bad anatomy,text,(mutation, bad drawing:1.2),obese,bad proportions,animals,low quality,signature,blurred,worst quality,(nsfw:1.2),realisticvision-negative-embedding
+Steps: 20, Sampler: DPM++ 2M, Schedule type: Karras, CFG scale: 7.0, Seed: 2982175946, Size: 1536x1152, Model hash: 5350dfc29c, Model: lw_Architecutral_MIX_V0.5, VAE hash: c6a580b13a, VAE: vae-ft-mse-840000-ema-pruned.ckpt, ControlNet 0: "Module: lineart_realistic, Model: control_v11p_sd15_lineart [43d4be0d], Weight: 0.9, Resize Mode: 1, Low Vram: False, Processor Res: 512, Guidance Start: 0.0, Guidance End: 0.8, Pixel Perfect: False, Control Mode: 0, Save Detected Map: True", Lora hashes: "ModernStyleMultistoryResidentialBuilding-20240629205654: 773a4031f9d5", TI hashes: "realisticvision-negative-embedding: 5511b02e263f", Version: v1.10.1
+"""
+    info_dict = extract_info_from_webui_img(webui_params_info.strip())
+    positive_text = info_dict["positive_text"]
+    negative_text = info_dict["negative_text"]
+    negative_text_no_embedding = info_dict["negative_text"]
+    params_dict = info_dict["params"]
+    loras = info_dict["loras"]
+    controlnets = info_dict["controlnets"]
+    # 提取checkpoint_name
+    checkpoint_name = params_dict.get("model", "")
+
+

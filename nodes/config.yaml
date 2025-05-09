@@ -1,0 +1,7 @@
+qwen:
+  # 阿里云dashscope, https://help.aliyun.com/zh/dashscope/developer-reference
+  api-key: sk-d50e08e3a48d4efebb06980e7fc2fe36
+
+ARK:
+  # 火山引擎, https://console.volcengine.com/ark/region:ark+cn-beijing/endpoint
+  api-key: 4554a630-d325-4c8e-b1cb-9b6cc59dd53c

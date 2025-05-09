@@ -10,17 +10,16 @@ import folder_paths
 
 
 class Malio_Get_Lora_Name:
-    """从controlnet文件夹中获取选择的controlnet的名称"""
+    """从lora文件夹中获取选择的lora的名称"""
 
-    # 得到controlnet文件夹中所有的controlnet文件的名称
-    lora_names = ["None"] + folder_paths.get_filename_list("loras")
+    # lora_names = ["None"] + folder_paths.get_filename_list("loras")
 
     @classmethod
     def INPUT_TYPES(cls):
         #controlnets = ["None"]
         return {
             "required": {
-                "lora_name": (cls.lora_names,),
+                "lora_name": (["None"] + folder_paths.get_filename_list("loras"),),
             }
         }
     
@@ -37,6 +36,38 @@ class Malio_Get_Lora_Name:
         if isinstance(lora_name, str):
             lora_name = lora_name.strip()
         return (lora_name, )
+
+
+class Malio_Get_Lora_Name_And_Keyword:
+    """从lora文件夹中获取选择的lora的名称, 并且可以设置触发词"""
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        # 得到controlnet文件夹中所有的controlnet文件的名称
+        # lora_names = ["None"] + folder_paths.get_filename_list("loras")
+        #controlnets = ["None"]
+        return {
+            "required": {
+                "lora_name": (["None"] + folder_paths.get_filename_list("loras"),),
+                "触发词": ("STRING", {"default": ""}),
+            }
+        }
+    
+    RETURN_TYPES = ("STRING", "STRING")
+    RETURN_NAMES = ("lora_name", "触发词")
+
+    
+    FUNCTION = "get_lora_name"
+
+    #OUTPUT_NODE = False
+
+    CATEGORY = "🐼malio/lora/get_lora_name_and_keyword"
+
+    def get_lora_name(self, lora_name, 触发词):
+        if isinstance(lora_name, str):
+            lora_name = lora_name.strip()
+        return (lora_name, 触发词)
+
 
 class Malio_LoRAStack_By_Name:
 

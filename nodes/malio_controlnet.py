@@ -13,14 +13,15 @@ class Malio_Get_Controlnet_Name:
     """从controlnet文件夹中获取选择的controlnet的名称"""
 
     # 得到controlnet文件夹中所有的controlnet文件的名称
-    controlnets = ["None"] + folder_paths.get_filename_list("controlnet")
+    # controlnets = ["None"] + folder_paths.get_filename_list("controlnet")
 
     @classmethod
     def INPUT_TYPES(cls):
-        #controlnets = ["None"]
+        # 得到controlnet文件夹中所有的controlnet文件的名称
+        controlnets = ["None"] + folder_paths.get_filename_list("controlnet")
         return {
             "required": {
-                "controlnet": (cls.controlnets,),
+                "controlnet": (controlnets,),
             }
         }
     
@@ -31,7 +32,7 @@ class Malio_Get_Controlnet_Name:
 
     #OUTPUT_NODE = False
 
-    CATEGORY = "🐼malio/controlnet/controlnet_name"
+    CATEGORY = "🐼malio/controlnet"
 
     def get_controlnet_name(self, controlnet):
         if isinstance(controlnet, str):
@@ -74,7 +75,7 @@ class Malio_ControlNetStack_By_Name:
     RETURN_TYPES = ("CONTROL_NET_STACK", "STRING", )
     RETURN_NAMES = ("CONTROLNET_STACK", "show_help", )
     FUNCTION = "controlnet_stacker"
-    CATEGORY = "🐼malio/controlnet/stack_by_name"
+    CATEGORY = "🐼malio/controlnet"
 
     def controlnet_stacker(self, 
                            switch_1, controlnet_1_name, controlnet_strength_1, start_percent_1, end_percent_1,
@@ -107,3 +108,18 @@ class Malio_ControlNetStack_By_Name:
 
         return (controlnet_list, show_help, )
 
+
+class Malio_ControlNet_Names_Selector:
+    """从controlnet文件夹中获取选择的controlnet的名称"""
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": { "control_net_name": (folder_paths.get_filename_list("controlnet"), )}}
+
+    RETURN_TYPES = ("STRING", )
+    RETURN_NAMES = ("control_net_name", )
+    FUNCTION = "load_controlnet"
+
+    CATEGORY = "🐼malio/controlnet/select"
+
+    def load_controlnet(self, control_net_name):
+        return (control_net_name, )

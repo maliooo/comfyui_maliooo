@@ -1,0 +1,356 @@
+{
+    "日式室内": {
+        "prompt": "",
+        "modelName": "jianzhuw_jzxz",
+        "negativePrompt": "NSFW, (worst quality), (low quality), (normal quality), lowres, blur, signature, drawing, sketch, text, word, logo, cropped, out of frame, wormline,(low quality),drawing,painting,crayon,sketch,graphite,soft,deformed,ugly,(soft line)",
+        "schedulerName": "DPM++ 2M Karras",
+        "guidanceScale": 7.5,
+        "imageGeneratedNum": 1,
+        "numInferenceSteps": 30,
+        "loraParamses": [
+            {
+                "loraName": "D-shineirishi",
+                "weight": 0.7
+            }
+        ],
+        "controlNetInfoList": [
+            {
+                "model": "control_v11p_sd15_lineart [43d4be0d]",
+                "module": "lineart_standard",
+                "mode": 1,
+                "url": "",
+                "controlGuidanceStart": 0.0,
+                "controlGuidanceEnd": 1.0,
+                "controlnetConditioningScale": 1.4
+            }
+        ],
+        "width": -1,
+        "height": -1
+    },
+    "现代轻奢": {
+        "prompt": "",
+        "modelName": "jianzhuw_jzxz",
+        "negativePrompt": "NSFW, (worst quality:2), (low quality:2), (normal quality:2), lowres, (monochrome), (grayscale), blur, signature, drawing, sketch, text, word, logo, cropped, out of frame, wormline: 2),(low quality:2),monochrome,grayscale,drawing,painting,crayon,sketch,graphite,soft,deformed,ugly,(soft line)",
+        "schedulerName": "DPM++ 2M Karras",
+        "guidanceScale": 7.5,
+        "imageGeneratedNum": 1,
+        "numInferenceSteps": 30,
+        "loraParamses": [
+            {
+                "loraName": "D-shineixiandai",
+                "weight": 0.6
+            }
+        ],
+        "controlNetInfoList": [
+            {
+                "model": "control_v11p_sd15_lineart [43d4be0d]",
+                "module": "lineart_standard",
+                "mode": 1,
+                "url": "",
+                "controlGuidanceStart": 0.0,
+                "controlGuidanceEnd": 1.0,
+                "controlnetConditioningScale": 1.4
+            }
+        ],
+        "width": -1,
+        "height": -1
+    },
+    "北欧奶油风": {
+        "prompt": "",
+        "modelName": "jianzhuw_jzxz",
+        "negativePrompt": "NSFW, (worst quality), (low quality), (normal quality), lowres, blur, signature, drawing, sketch, text, word, logo, cropped, out of frame, wormline,(low quality),drawing,painting,crayon,sketch,graphite,soft,deformed,ugly,(soft line)",
+        "schedulerName": "DPM++ 2M Karras",
+        "guidanceScale": 7.5,
+        "imageGeneratedNum": 1,
+        "numInferenceSteps": 30,
+        "loraParamses": [
+            {
+                "loraName": "nordic-modern-interior-style",
+                "weight": 0.8
+            }
+        ],
+        "controlNetInfoList": [
+            {
+                "model": "control_v11p_sd15_lineart [43d4be0d]",
+                "module": "lineart_standard",
+                "mode": 1,
+                "url": "",
+                "controlGuidanceStart": 0.0,
+                "controlGuidanceEnd": 1.0,
+                "controlnetConditioningScale": 1.4
+            }
+        ],
+        "width": -1,
+        "height": -1
+    },
+    "侘寂风格": {
+        "prompt": "",
+        "modelName": "jianzhuw_jzxz",
+        "negativePrompt": "NSFW, (worst quality), (low quality), (normal quality), lowres, blur, signature, drawing, sketch, text, word, logo, cropped, out of frame, wormline,(low quality),drawing,painting,crayon,sketch,graphite,soft,deformed,ugly,(soft line)",
+        "schedulerName": "DPM++ 2M Karras",
+        "guidanceScale": 7.5,
+        "imageGeneratedNum": 1,
+        "numInferenceSteps": 30,
+        "loraParamses": [
+            {
+                "loraName": "WabiSabv1.0",
+                "weight": 1.2
+            }
+        ],
+        "controlNetInfoList": [
+            {
+                "model": "control_v11p_sd15_lineart [43d4be0d]",
+                "module": "lineart_standard",
+                "mode": 1,
+                "url": "",
+                "controlGuidanceStart": 0.0,
+                "controlGuidanceEnd": 1.0,
+                "controlnetConditioningScale": 1.4
+            }
+        ],
+        "width": -1,
+        "height": -1
+    },
+    "豪华风格": {
+        "prompt": "",
+        "modelName": "jianzhuw_jzxz",
+        "negativePrompt": "NSFW, (worst quality), (low quality), (normal quality), lowres, blur, signature, drawing, sketch, text, word, logo, cropped, out of frame, wormline,(low quality),drawing,painting,crayon,sketch,graphite,soft,deformed,ugly,(soft line)",
+        "schedulerName": "DPM++ 2M Karras",
+        "guidanceScale": 7.5,
+        "imageGeneratedNum": 1,
+        "numInferenceSteps": 30,
+        "loraParamses": [
+            {
+                "loraName": "bieshusheji",
+                "weight": 0.6
+            }
+        ],
+        "controlNetInfoList": [
+            {
+                "model": "control_v11p_sd15_lineart [43d4be0d]",
+                "module": "lineart_standard",
+                "mode": 1,
+                "url": "",
+                "controlGuidanceStart": 0.0,
+                "controlGuidanceEnd": 1.0,
+                "controlnetConditioningScale": 1.4
+            }
+        ],
+        "width": -1,
+        "height": -1
+    },
+    "不限定": {
+        "prompt": "",
+        "modelName": "jianzhuw_jzxz",
+        "negativePrompt": "NSFW, (worst quality:1.5), (low quality:1.5), (normal quality:1.5), lowres, blur, signature, drawing, sketch, text, word, logo, cropped, out of frame, wormline,(low quality),drawing,painting,crayon,sketch,graphite,soft,deformed,ugly,(soft line)",
+        "schedulerName": "DPM++ 2M Karras",
+        "guidanceScale": 7.5,
+        "imageGeneratedNum": 1,
+        "numInferenceSteps": 30,
+        "loraParamses": [],
+        "controlNetInfoList": [
+            {
+                "model": "control_v11p_sd15_lineart [43d4be0d]",
+                "module": "lineart_standard",
+                "mode": 1,
+                "url": "",
+                "controlGuidanceStart": 0.0,
+                "controlGuidanceEnd": 1.0,
+                "controlnetConditioningScale": 1.4
+            }
+        ],
+        "width": -1,
+        "height": -1
+    },
+    "线稿风格": {
+        "prompt": "",
+        "modelName": "jianzhuw_jzxz",
+        "negativePrompt": "NSFW,(worst quality),(low quality),(normal quality),lowres,blur,signature,drawing,sketch,text,word,logo,cropped,out of frame,wormline,(low quality),drawing,painting,crayon,sketch,graphite,soft,deformed,ugly,(soft line)",
+        "schedulerName": "DPM++ 2M Karras",
+        "guidanceScale": 7.5,
+        "imageGeneratedNum": 1,
+        "numInferenceSteps": 30,
+        "loraParamses": [
+            {
+                "loraName": "手绘线稿风Lineart-v2.0",
+                "weight": 1.0
+            }
+        ],
+        "controlNetInfoList": [
+            {
+                "model": "control_v11p_sd15_lineart [43d4be0d]",
+                "module": "lineart_standard",
+                "mode": 1,
+                "url": "",
+                "controlGuidanceStart": 0.0,
+                "controlGuidanceEnd": 1.0,
+                "controlnetConditioningScale": 1.4
+            }
+        ],
+        "width": -1,
+        "height": -1
+    },
+    "新中式风格": {
+        "prompt": "",
+        "modelName": "jianzhuw_jzxz",
+        "negativePrompt": "NSFW, (worst quality), (low quality), (normal quality), lowres, blur, signature, drawing, sketch, text, word, logo, cropped, out of frame, wormline,(low quality),drawing,painting,crayon,sketch,graphite,soft,deformed,ugly,(soft line)",
+        "schedulerName": "DPM++ 2M Karras",
+        "guidanceScale": 7.5,
+        "imageGeneratedNum": 1,
+        "numInferenceSteps": 30,
+        "loraParamses": [
+            {
+                "loraName": "xinzhongshishinei",
+                "weight": 0.7
+            }
+        ],
+        "controlNetInfoList": [
+            {
+                "model": "control_v11p_sd15_lineart [43d4be0d]",
+                "module": "lineart_standard",
+                "mode": 1,
+                "url": "",
+                "controlGuidanceStart": 0.0,
+                "controlGuidanceEnd": 1.0,
+                "controlnetConditioningScale": 1.4
+            }
+        ],
+        "width": -1,
+        "height": -1
+    },
+    "梦幻风格": {
+        "prompt": "",
+        "modelName": "jianzhuw_jzxz",
+        "negativePrompt": "NSFW, (worst quality), (low quality), (normal quality), lowres, blur, signature, drawing, sketch, text, word, logo, cropped, out of frame, wormline,(low quality),drawing,painting,crayon,sketch,graphite,soft,deformed,ugly,(soft line)",
+        "schedulerName": "DPM++ 2M Karras",
+        "guidanceScale": 7.5,
+        "imageGeneratedNum": 1,
+        "numInferenceSteps": 30,
+        "loraParamses": [
+            {
+                "loraName": "chaoxianshi_1.0",
+                "weight": 0.8
+            }
+        ],
+        "controlNetInfoList": [
+            {
+                "model": "control_v11p_sd15_lineart [43d4be0d]",
+                "module": "lineart_standard",
+                "mode": 1,
+                "url": "",
+                "controlGuidanceStart": 0.0,
+                "controlGuidanceEnd": 1.0,
+                "controlnetConditioningScale": 1.4
+            }
+        ],
+        "width": -1,
+        "height": -1
+    },
+    "现代风格": {
+        "prompt": "",
+        "modelName": "jianzhuw_jzxz",
+        "negativePrompt": "NSFW, (worst quality), (low quality), (normal quality), lowres, blur, signature, drawing, sketch, text, word, logo, cropped, out of frame, wormline,(low quality),drawing,painting,crayon,sketch,graphite,soft,deformed,ugly,(soft line)",
+        "schedulerName": "DPM++ 2M Karras",
+        "guidanceScale": 7.5,
+        "imageGeneratedNum": 1,
+        "numInferenceSteps": 30,
+        "loraParamses": [
+            {
+                "loraName": "mordeninterior",
+                "weight": 0.5
+            }
+        ],
+        "controlNetInfoList": [
+            {
+                "model": "control_v11p_sd15_lineart [43d4be0d]",
+                "module": "lineart_standard",
+                "mode": 1,
+                "url": "",
+                "controlGuidanceStart": 0.0,
+                "controlGuidanceEnd": 1.0,
+                "controlnetConditioningScale": 1.4
+            }
+        ],
+        "width": -1,
+        "height": -1
+    },
+    "现代时尚": {
+        "prompt": "",
+        "modelName": "jianzhuw_jzxz",
+        "negativePrompt": "NSFW, (worst quality:1.5), (low quality:1.5), (normal quality:1.5), lowres, blur, signature, drawing, sketch, text, word, logo, cropped, out of frame, wormline,(low quality),drawing,painting,crayon,sketch,graphite,soft,deformed,ugly,(soft line)",
+        "schedulerName": "DPM++ 2M Karras",
+        "guidanceScale": 7.5,
+        "imageGeneratedNum": 1,
+        "numInferenceSteps": 30,
+        "loraParamses": [],
+        "controlNetInfoList": [
+            {
+                "model": "control_v11p_sd15_lineart [43d4be0d]",
+                "module": "lineart_standard",
+                "mode": 1,
+                "url": "",
+                "controlGuidanceStart": 0.0,
+                "controlGuidanceEnd": 1.0,
+                "controlnetConditioningScale": 1.4
+            }
+        ],
+        "width": -1,
+        "height": -1
+    },
+    "极简高级灰": {
+        "prompt": "",
+        "modelName": "jianzhuw_jzxz",
+        "negativePrompt": "NSFW, (worst quality), (low quality), (normal quality), lowres, blur, signature, drawing, sketch, text, word, logo, cropped, out of frame, wormline,(low quality),drawing,painting,crayon,sketch,graphite,soft,deformed,ugly,(soft line)",
+        "schedulerName": "DPM++ 2M Karras",
+        "guidanceScale": 7.5,
+        "imageGeneratedNum": 1,
+        "numInferenceSteps": 30,
+        "loraParamses": [
+            {
+                "loraName": "luxurious-grey-style-_v1.0",
+                "weight": 0.7
+            }
+        ],
+        "controlNetInfoList": [
+            {
+                "model": "control_v11p_sd15_lineart [43d4be0d]",
+                "module": "lineart_standard",
+                "mode": 1,
+                "url": "",
+                "controlGuidanceStart": 0.0,
+                "controlGuidanceEnd": 1.0,
+                "controlnetConditioningScale": 1.4
+            }
+        ],
+        "width": -1,
+        "height": -1
+    },
+    "原木风格": {
+        "prompt": "",
+        "modelName": "jianzhuw_jzxz",
+        "negativePrompt": "NSFW, (worst quality), (low quality), (normal quality), lowres, blur, signature, drawing, sketch, text, word, logo, cropped, out of frame, wormline,(low quality),drawing,painting,crayon,sketch,graphite,soft,deformed,ugly,(soft line)",
+        "schedulerName": "DPM++ 2M Karras",
+        "guidanceScale": 7.5,
+        "imageGeneratedNum": 1,
+        "numInferenceSteps": 30,
+        "loraParamses": [
+            {
+                "loraName": "xsarchitectural-9JapanesewabiSabi3",
+                "weight": 0.6
+            }
+        ],
+        "controlNetInfoList": [
+            {
+                "model": "control_v11p_sd15_lineart [43d4be0d]",
+                "module": "lineart_standard",
+                "mode": 1,
+                "url": "",
+                "controlGuidanceStart": 0.0,
+                "controlGuidanceEnd": 1.0,
+                "controlnetConditioningScale": 1.4
+            }
+        ],
+        "width": -1,
+        "height": -1
+    }
+}
