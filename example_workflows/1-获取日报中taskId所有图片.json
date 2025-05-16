@@ -1,0 +1,2056 @@
+{
+  "id": "f1826071-8a0f-46e5-a94e-574b7274e02a",
+  "revision": 0,
+  "last_node_id": 348,
+  "last_link_id": 569,
+  "nodes": [
+    {
+      "id": 278,
+      "type": "SwitchByIndex",
+      "pos": [
+        -2067.0751953125,
+        21876.056640625
+      ],
+      "size": [
+        287.5201110839844,
+        102
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "A",
+          "shape": 7,
+          "type": "*",
+          "link": 437
+        },
+        {
+          "name": "B",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "index",
+          "type": "INT",
+          "widget": {
+            "name": "index"
+          },
+          "link": 438
+        }
+      ],
+      "outputs": [
+        {
+          "name": "list",
+          "shape": 6,
+          "type": "*",
+          "links": [
+            449
+          ]
+        },
+        {
+          "name": "count",
+          "type": "INT",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SwitchByIndex"
+      },
+      "widgets_values": [
+        -1,
+        "on"
+      ]
+    },
+    {
+      "id": 288,
+      "type": "ShowText|pysssss",
+      "pos": [
+        -1812.30517578125,
+        22127.892578125
+      ],
+      "size": [
+        210,
+        135.1735382080078
+      ],
+      "flags": {},
+      "order": 27,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 449
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": [
+            450
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": [
+        "https://image9.znzmo.com/9848bb1b-1b52-42c5-b536-45a53785ab5b.png"
+      ]
+    },
+    {
+      "id": 289,
+      "type": "ZnzmoGetImageFromUrl",
+      "pos": [
+        -1603.0084228515625,
+        21893.27734375
+      ],
+      "size": [
+        334.0718688964844,
+        126
+      ],
+      "flags": {},
+      "order": 29,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "url",
+          "type": "STRING",
+          "widget": {
+            "name": "url"
+          },
+          "link": 450
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            452
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ZnzmoGetImageFromUrl"
+      },
+      "widgets_values": [
+        "",
+        10,
+        2
+      ]
+    },
+    {
+      "id": 290,
+      "type": "easy batchAnything",
+      "pos": [
+        -1299.033447265625,
+        21699.33984375
+      ],
+      "size": [
+        140,
+        46
+      ],
+      "flags": {},
+      "order": 31,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "any_1",
+          "type": "*",
+          "link": 451
+        },
+        {
+          "name": "any_2",
+          "type": "*",
+          "link": 452
+        }
+      ],
+      "outputs": [
+        {
+          "name": "batch",
+          "type": "*",
+          "links": [
+            441
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "easy batchAnything"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 287,
+      "type": "easy showAnything",
+      "pos": [
+        -3007.849365234375,
+        21765.53125
+      ],
+      "size": [
+        331.9710388183594,
+        264.572265625
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 448
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "https://image9.znzmo.com/cebf5592-3907-415c-bab0-e3aaa14b1fda.png",
+        "https://image9.znzmo.com/23afa784-8df9-4b5b-b426-582be921a86a.png",
+        "https://image9.znzmo.com/66895286-ec9b-45fd-b726-9316ec663952.png",
+        "https://image9.znzmo.com/9848bb1b-1b52-42c5-b536-45a53785ab5b.png"
+      ]
+    },
+    {
+      "id": 279,
+      "type": "easy forLoopStart",
+      "pos": [
+        -2319.018310546875,
+        21655.875
+      ],
+      "size": [
+        270,
+        118
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "initial_value1",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "total",
+          "type": "INT",
+          "widget": {
+            "name": "total"
+          },
+          "link": 439
+        },
+        {
+          "name": "initial_value2",
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "flow",
+          "shape": 5,
+          "type": "FLOW_CONTROL",
+          "links": [
+            440
+          ]
+        },
+        {
+          "name": "index",
+          "type": "INT",
+          "links": [
+            438
+          ]
+        },
+        {
+          "name": "value1",
+          "type": "*",
+          "links": [
+            451
+          ]
+        },
+        {
+          "name": "value2",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "easy forLoopStart"
+      },
+      "widgets_values": [
+        1
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 286,
+      "type": "easy lengthAnything",
+      "pos": [
+        -2591.0029296875,
+        21750.876953125
+      ],
+      "size": [
+        140,
+        26
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "any",
+          "type": "*",
+          "link": 447
+        }
+      ],
+      "outputs": [
+        {
+          "name": "length",
+          "type": "INT",
+          "links": [
+            439
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "easy lengthAnything"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 274,
+      "type": "easy showAnything",
+      "pos": [
+        -3818.2978515625,
+        20879.09375
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 433
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "85"
+      ]
+    },
+    {
+      "id": 276,
+      "type": "easy showAnything",
+      "pos": [
+        -3546.81982421875,
+        20793.42578125
+      ],
+      "size": [
+        351.1571960449219,
+        187.347412109375
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 435
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "['taskId', 'imageId', 'accountId', 'drawType', 'pictureQuality', 'batchSize', 'style', 'classifyName', 'firstClassifyName', 'childClassifyName', 'renderingStrength', 'serviceType', 'subServiceType', 'prompt', 'referenceImg', 'styleReference', 'imageUrl', 'sdModelCheckpoint', 'lora', 'dayInfo', 'imageDuration', 'workflowType', 'channel', 'paramData', 'styleReferenceDimension', 'downloadNum', 'referenceType', 'feedback']"
+      ]
+    },
+    {
+      "id": 281,
+      "type": "easy showAnything",
+      "pos": [
+        -3125.604736328125,
+        20839.244140625
+      ],
+      "size": [
+        337.4049377441406,
+        88
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 442
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "4275393"
+      ]
+    },
+    {
+      "id": 277,
+      "type": "easy showAnything",
+      "pos": [
+        -3039.971435546875,
+        21013.73046875
+      ],
+      "size": [
+        352.03594970703125,
+        88
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 436
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": [
+            458
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "https://user.file.znzmo.com/1747137520327_4153.jpeg"
+      ]
+    },
+    {
+      "id": 296,
+      "type": "ZnzmoGetImageFromUrl",
+      "pos": [
+        -2527.67529296875,
+        21004.498046875
+      ],
+      "size": [
+        334.0718688964844,
+        126
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "url",
+          "type": "STRING",
+          "widget": {
+            "name": "url"
+          },
+          "link": 458
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            459
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ZnzmoGetImageFromUrl"
+      },
+      "widgets_values": [
+        "",
+        10,
+        2
+      ]
+    },
+    {
+      "id": 280,
+      "type": "easy forLoopEnd",
+      "pos": [
+        -1092.8603515625,
+        21651.33984375
+      ],
+      "size": [
+        149.7421875,
+        66
+      ],
+      "flags": {},
+      "order": 33,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "flow",
+          "shape": 5,
+          "type": "FLOW_CONTROL",
+          "link": 440
+        },
+        {
+          "name": "initial_value1",
+          "shape": 7,
+          "type": "*",
+          "link": 441
+        },
+        {
+          "name": "initial_value2",
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "value1",
+          "type": "*",
+          "links": [
+            541
+          ]
+        },
+        {
+          "name": "value2",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "easy forLoopEnd"
+      },
+      "widgets_values": [],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 292,
+      "type": "SetNode",
+      "pos": [
+        -326.2423095703125,
+        21796.853515625
+      ],
+      "size": [
+        279.3681335449219,
+        62.34318161010742
+      ],
+      "flags": {},
+      "order": 35,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "link": 542
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Set_输入-知末生成图-batch",
+      "properties": {
+        "previousName": ""
+      },
+      "widgets_values": [
+        "输入-知末生成图-batch"
+      ],
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 293,
+      "type": "PreviewBridge",
+      "pos": [
+        -2064.324462890625,
+        20786.064453125
+      ],
+      "size": [
+        341.5794677734375,
+        350
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 459
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            543
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewBridge"
+      },
+      "widgets_values": [
+        "$293-0",
+        false,
+        "never"
+      ]
+    },
+    {
+      "id": 332,
+      "type": "SetNode",
+      "pos": [
+        -1624.927734375,
+        20839.46484375
+      ],
+      "size": [
+        210,
+        60
+      ],
+      "flags": {},
+      "order": 24,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "link": 543
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Set_输入-底图",
+      "properties": {
+        "previousName": "输入-底图"
+      },
+      "widgets_values": [
+        "输入-底图"
+      ],
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 314,
+      "type": "easy showAnything",
+      "pos": [
+        -3018.647705078125,
+        23190.56640625
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 486
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": [
+            487
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "局部创意"
+      ]
+    },
+    {
+      "id": 315,
+      "type": "SetNode",
+      "pos": [
+        -2721.18017578125,
+        23232.58984375
+      ],
+      "size": [
+        210,
+        60
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "link": 487
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Set_输入-控制类型",
+      "properties": {
+        "previousName": "输入-控制类型"
+      },
+      "widgets_values": [
+        "输入-控制类型"
+      ]
+    },
+    {
+      "id": 282,
+      "type": "easy showAnything",
+      "pos": [
+        -3089.014404296875,
+        22900.20703125
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 443
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": [
+            444
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "现代"
+      ]
+    },
+    {
+      "id": 307,
+      "type": "DF_Text",
+      "pos": [
+        -2809.33837890625,
+        22949.83984375
+      ],
+      "size": [
+        270,
+        58
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            473
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DF_Text"
+      },
+      "widgets_values": [
+        "风格"
+      ]
+    },
+    {
+      "id": 283,
+      "type": "SetNode",
+      "pos": [
+        -2756.7294921875,
+        22819.7578125
+      ],
+      "size": [
+        210,
+        58
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "link": 444
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": [
+            472
+          ]
+        }
+      ],
+      "title": "Set_输入-style",
+      "properties": {
+        "previousName": ""
+      },
+      "widgets_values": [
+        "输入-style"
+      ]
+    },
+    {
+      "id": 306,
+      "type": "CR Text Concatenate",
+      "pos": [
+        -2469.0927734375,
+        22906.0859375
+      ],
+      "size": [
+        270,
+        78
+      ],
+      "flags": {},
+      "order": 23,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text1",
+          "shape": 7,
+          "type": "STRING",
+          "link": 472
+        },
+        {
+          "name": "text2",
+          "shape": 7,
+          "type": "STRING",
+          "link": 473
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "*",
+          "links": [
+            474
+          ]
+        },
+        {
+          "name": "show_help",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CR Text Concatenate"
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 305,
+      "type": "Text Concatenate",
+      "pos": [
+        -2066.300537109375,
+        22860.55078125
+      ],
+      "size": [
+        270,
+        142
+      ],
+      "flags": {},
+      "order": 28,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text_a",
+          "shape": 7,
+          "type": "STRING",
+          "link": 474
+        },
+        {
+          "name": "text_b",
+          "shape": 7,
+          "type": "STRING",
+          "link": 514
+        },
+        {
+          "name": "text_c",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "name": "text_d",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            484
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Text Concatenate"
+      },
+      "widgets_values": [
+        ", ",
+        "true"
+      ]
+    },
+    {
+      "id": 327,
+      "type": "ZnzmoSwitchNodeV2",
+      "pos": [
+        -2444.794921875,
+        22384.302734375
+      ],
+      "size": [
+        274.9615173339844,
+        406
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "condition",
+          "type": "*",
+          "link": 509
+        },
+        {
+          "name": "option1",
+          "shape": 7,
+          "type": "*",
+          "link": 510
+        },
+        {
+          "name": "option2",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "option3",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "option4",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "option5",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "option6",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "option7",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "option8",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "default",
+          "shape": 7,
+          "type": "*",
+          "link": 513
+        }
+      ],
+      "outputs": [
+        {
+          "name": "data",
+          "type": "*",
+          "links": [
+            514
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ZnzmoSwitchNodeV2"
+      },
+      "widgets_values": [
+        "null",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 313,
+      "type": "ShowText|pysssss",
+      "pos": [
+        -1605.9908447265625,
+        22871.044921875
+      ],
+      "size": [
+        410.0308837890625,
+        149.4700164794922
+      ],
+      "flags": {},
+      "order": 30,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 484
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": [
+            549
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": [
+        "现代风格, 岩板电视墙，中性色调"
+      ]
+    },
+    {
+      "id": 337,
+      "type": "SetNode",
+      "pos": [
+        -1043.964599609375,
+        22905.03515625
+      ],
+      "size": [
+        239.47535705566406,
+        58
+      ],
+      "flags": {},
+      "order": 32,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "link": 549
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Set_输入-拼接正向词中文",
+      "properties": {
+        "previousName": "输入-拼接正向词中文"
+      },
+      "widgets_values": [
+        "输入-拼接正向词中文"
+      ]
+    },
+    {
+      "id": 330,
+      "type": "PreviewBridge",
+      "pos": [
+        -791.6824340820312,
+        21715.2734375
+      ],
+      "size": [
+        424.2388916015625,
+        484.94921875
+      ],
+      "flags": {},
+      "order": 34,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 541
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            542
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewBridge"
+      },
+      "widgets_values": [
+        "$330-0",
+        false,
+        "never"
+      ]
+    },
+    {
+      "id": 295,
+      "type": "Maliooo_LoadImageByCsv_V2",
+      "pos": [
+        -3853.586669921875,
+        21339.927734375
+      ],
+      "size": [
+        601.6851806640625,
+        994
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "csv数据条数",
+          "type": "INT",
+          "links": [
+            433
+          ]
+        },
+        {
+          "name": "columns",
+          "type": "STRING",
+          "links": [
+            435
+          ]
+        },
+        {
+          "name": "task_id",
+          "type": "STRING",
+          "links": [
+            442
+          ]
+        },
+        {
+          "name": "输入底图url",
+          "type": "STRING",
+          "links": [
+            436
+          ]
+        },
+        {
+          "name": "输入风格参考图url",
+          "type": "STRING",
+          "links": [
+            462
+          ]
+        },
+        {
+          "name": "输入遮罩url",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "输入知末生成图url_list",
+          "type": "LIST",
+          "links": [
+            437,
+            447,
+            448
+          ]
+        },
+        {
+          "name": "info_1",
+          "type": "STRING",
+          "links": [
+            446
+          ]
+        },
+        {
+          "name": "info_2",
+          "type": "STRING",
+          "links": [
+            443
+          ]
+        },
+        {
+          "name": "info_3",
+          "type": "STRING",
+          "links": [
+            486
+          ]
+        },
+        {
+          "name": "info_4",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "info_5",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "info_6",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Maliooo_LoadImageByCsv_V2"
+      },
+      "widgets_values": [
+        "/home/public/01-产品训练模型/临时文件/任务流水水-20250513.csv",
+        true,
+        84,
+        "increment",
+        "taskId",
+        "referenceImg",
+        "",
+        "",
+        "imageUrl",
+        "prompt",
+        "style",
+        "renderingStrength",
+        "",
+        "",
+        "",
+        "taskId",
+        "referenceImg",
+        "styleReference",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "drawType",
+        "灵感渲染",
+        "childClassifyName",
+        "客厅",
+        "subServiceType",
+        "效果图衍生"
+      ]
+    },
+    {
+      "id": 285,
+      "type": "easy showAnything",
+      "pos": [
+        -3129.95654296875,
+        22456.859375
+      ],
+      "size": [
+        210,
+        101.19220733642578
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 446
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": [
+            509,
+            513
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "岩板电视墙，中性色调"
+      ]
+    },
+    {
+      "id": 328,
+      "type": "DF_Text",
+      "pos": [
+        -2768.290283203125,
+        22592.93359375
+      ],
+      "size": [
+        270,
+        58
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            510
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DF_Text"
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 334,
+      "type": "ZnzmoNoneNode",
+      "pos": [
+        -2052.541748046875,
+        21289.564453125
+      ],
+      "size": [
+        173.72714233398438,
+        26
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "none",
+          "type": "*",
+          "links": [
+            563
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ZnzmoNoneNode"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 298,
+      "type": "easy showAnything",
+      "pos": [
+        -2799.562255859375,
+        21265.82421875
+      ],
+      "size": [
+        352.03594970703125,
+        88
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 462
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": [
+            562,
+            564
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "null"
+      ]
+    },
+    {
+      "id": 346,
+      "type": "Load Image From Url (mtb)",
+      "pos": [
+        -2151.341796875,
+        21388.328125
+      ],
+      "size": [
+        270,
+        58
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "url",
+          "type": "STRING",
+          "widget": {
+            "name": "url"
+          },
+          "link": 564
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            565
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Load Image From Url (mtb)"
+      },
+      "widgets_values": [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Example.jpg/800px-Example.jpg"
+      ]
+    },
+    {
+      "id": 336,
+      "type": "SetNode",
+      "pos": [
+        -933.4920043945312,
+        21208.451171875
+      ],
+      "size": [
+        210,
+        60
+      ],
+      "flags": {},
+      "order": 25,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "link": 567
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Set_输入-风格参考图",
+      "properties": {
+        "previousName": "输入-风格参考图"
+      },
+      "widgets_values": [
+        "输入-风格参考图"
+      ],
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 344,
+      "type": "ZnzmoSwitchNode",
+      "pos": [
+        -1669.74072265625,
+        21171.78125
+      ],
+      "size": [
+        360.5542907714844,
+        406
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "condition",
+          "type": "*",
+          "link": 562
+        },
+        {
+          "name": "option1",
+          "shape": 7,
+          "type": "*",
+          "link": 563
+        },
+        {
+          "name": "option2",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "option3",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "option4",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "option5",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "option6",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "option7",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "option8",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "default",
+          "shape": 7,
+          "type": "*",
+          "link": 565
+        }
+      ],
+      "outputs": [
+        {
+          "name": "data",
+          "type": "*",
+          "links": [
+            567,
+            569
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ZnzmoSwitchNode"
+      },
+      "widgets_values": [
+        "null",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 348,
+      "type": "easy showAnything",
+      "pos": [
+        -1159.04296875,
+        21371.81640625
+      ],
+      "size": [
+        269.0655212402344,
+        142.3828887939453
+      ],
+      "flags": {},
+      "order": 26,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 569
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "null"
+      ]
+    }
+  ],
+  "links": [
+    [
+      433,
+      295,
+      0,
+      274,
+      0,
+      "*"
+    ],
+    [
+      435,
+      295,
+      1,
+      276,
+      0,
+      "*"
+    ],
+    [
+      436,
+      295,
+      3,
+      277,
+      0,
+      "*"
+    ],
+    [
+      437,
+      295,
+      6,
+      278,
+      0,
+      "*"
+    ],
+    [
+      438,
+      279,
+      1,
+      278,
+      2,
+      "INT"
+    ],
+    [
+      439,
+      286,
+      0,
+      279,
+      1,
+      "INT"
+    ],
+    [
+      440,
+      279,
+      0,
+      280,
+      0,
+      "FLOW_CONTROL"
+    ],
+    [
+      441,
+      290,
+      0,
+      280,
+      1,
+      "*"
+    ],
+    [
+      442,
+      295,
+      2,
+      281,
+      0,
+      "*"
+    ],
+    [
+      443,
+      295,
+      8,
+      282,
+      0,
+      "*"
+    ],
+    [
+      444,
+      282,
+      0,
+      283,
+      0,
+      "*"
+    ],
+    [
+      446,
+      295,
+      7,
+      285,
+      0,
+      "*"
+    ],
+    [
+      447,
+      295,
+      6,
+      286,
+      0,
+      "*"
+    ],
+    [
+      448,
+      295,
+      6,
+      287,
+      0,
+      "*"
+    ],
+    [
+      449,
+      278,
+      0,
+      288,
+      0,
+      "STRING"
+    ],
+    [
+      450,
+      288,
+      0,
+      289,
+      0,
+      "STRING"
+    ],
+    [
+      451,
+      279,
+      2,
+      290,
+      0,
+      "*"
+    ],
+    [
+      452,
+      289,
+      0,
+      290,
+      1,
+      "*"
+    ],
+    [
+      458,
+      277,
+      0,
+      296,
+      0,
+      "STRING"
+    ],
+    [
+      459,
+      296,
+      0,
+      293,
+      0,
+      "IMAGE"
+    ],
+    [
+      462,
+      295,
+      4,
+      298,
+      0,
+      "*"
+    ],
+    [
+      472,
+      283,
+      0,
+      306,
+      0,
+      "STRING"
+    ],
+    [
+      473,
+      307,
+      0,
+      306,
+      1,
+      "STRING"
+    ],
+    [
+      474,
+      306,
+      0,
+      305,
+      0,
+      "STRING"
+    ],
+    [
+      484,
+      305,
+      0,
+      313,
+      0,
+      "STRING"
+    ],
+    [
+      486,
+      295,
+      9,
+      314,
+      0,
+      "*"
+    ],
+    [
+      487,
+      314,
+      0,
+      315,
+      0,
+      "*"
+    ],
+    [
+      509,
+      285,
+      0,
+      327,
+      0,
+      "*"
+    ],
+    [
+      510,
+      328,
+      0,
+      327,
+      1,
+      "*"
+    ],
+    [
+      513,
+      285,
+      0,
+      327,
+      9,
+      "*"
+    ],
+    [
+      514,
+      327,
+      0,
+      305,
+      1,
+      "STRING"
+    ],
+    [
+      541,
+      280,
+      0,
+      330,
+      0,
+      "IMAGE"
+    ],
+    [
+      542,
+      330,
+      0,
+      292,
+      0,
+      "*"
+    ],
+    [
+      543,
+      293,
+      0,
+      332,
+      0,
+      "*"
+    ],
+    [
+      549,
+      313,
+      0,
+      337,
+      0,
+      "*"
+    ],
+    [
+      562,
+      298,
+      0,
+      344,
+      0,
+      "*"
+    ],
+    [
+      563,
+      334,
+      0,
+      344,
+      1,
+      "*"
+    ],
+    [
+      564,
+      298,
+      0,
+      346,
+      0,
+      "STRING"
+    ],
+    [
+      565,
+      346,
+      0,
+      344,
+      9,
+      "*"
+    ],
+    [
+      567,
+      344,
+      0,
+      336,
+      0,
+      "IMAGE"
+    ],
+    [
+      569,
+      344,
+      0,
+      348,
+      0,
+      "*"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 24,
+      "title": "获取日报中同一个taskid的所有生成图片",
+      "bounding": [
+        -3891.1103515625,
+        20601.419921875,
+        4355.58837890625,
+        3162.4228515625
+      ],
+      "color": "#3f789e",
+      "font_size": 70,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.16105100000000028,
+      "offset": [
+        3604.2320777045356,
+        -20486.504991319445
+      ]
+    },
+    "frontendVersion": "1.18.6",
+    "ue_links": []
+  },
+  "version": 0.4
+}

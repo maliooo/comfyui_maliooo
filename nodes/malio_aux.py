@@ -6,6 +6,7 @@ import sys
 from PIL import Image
 from .utils import  pil2tensor, tensor2pil
 import cv2
+import traceback
 import numpy as np
 # custom_nodes_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # sys.path.append(os.path.join(custom_nodes_path, "comfyui_controlnet_aux/src"))
@@ -56,5 +57,6 @@ class Malio_OneFormer_ADE20K_SemSegPreprocessor:
             return (pil2tensor(detected_map), label_text_list, label_text_ratio,)
         except Exception as e:
             print(f"调用OneFormer进行语义分割出错，错误原因:{e},  出错文件为{__file__}")
+            traceback.print_exc()
             return (image, [], [])
     

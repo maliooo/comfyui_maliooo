@@ -1,9 +1,10 @@
 import torch
 import numpy as np
-from typing import List, Union
+from typing import List, Union, Literal
 from PIL import Image, ImageOps, ImageSequence
 import re
 import cv2
+import pandas as pd
 
 def pil2tensor(image: Union[Image.Image, List[Image.Image]]) -> torch.Tensor:
     """传入一个PIL Image对象或者一个Image对象列表，返回一个tensor"""
@@ -375,6 +376,20 @@ class Malio_BBOXES:
             output = None
         return (output,)
 
+def get_column_type(column: pd.Series) -> Literal["字符串类型", "整数类型", "浮点数类型", "布尔类型", "未知类型"]:
+    """
+    获取pandas的Series列的数据类型
+    """
+    if column.dtype == 'object':
+        return '字符串类型'
+    elif column.dtype == 'int64':
+        return '整数类型'
+    elif column.dtype == 'float64':
+        return '浮点数类型'
+    elif column.dtype == 'bool':
+        return '布尔类型'
+    else:
+        return '未知类型'
 
 # if __name__ == "__main__":
 #     eval_node = Malio_BBOXES()

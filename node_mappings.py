@@ -1,6 +1,6 @@
 from .nodes.malio_controlnet import Malio_Get_Controlnet_Name, Malio_ControlNetStack_By_Name
 from .nodes.malio_lora import Malio_Get_Lora_Name, Malio_LoRAStack_By_Name, Malio_Get_Lora_Name_And_Keyword
-from .nodes.malio_image import Malio_ImageScale_Side, Malio_ImageScale_Side_Cascade, Maliooo_LoadImageFromUrl, Maliooo_LoadImageByPathSequence, Maliooo_LoadImageByCsv
+from .nodes.malio_image import Malio_ImageScale_Side, Malio_ImageScale_Side_Cascade, Maliooo_LoadImageFromUrl, Maliooo_LoadImageByPathSequence, Maliooo_LoadImageByCsv, Maliooo_LoadImageByCsv_V2
 from .nodes.malio_image import Maliooo_LoadImageByPath, Malio_Repeat_and_Tile_Image, Malio_SaveImage, Malio_SD35_Image_Resize
 from .nodes.malio_nsfw import Malio_NSFWDetection
 from .nodes.malio_image_info import Malio_Webui_Info_Params, Maliooo_Get_Controlnet_Stack,  Maliooo_Get_Lora_Stack
@@ -16,6 +16,7 @@ from .nodes.malio_aux import Malio_OneFormer_ADE20K_SemSegPreprocessor
 from .nodes.malio_tags import Malio_Merge_Tags_By_Onerformer_ADE20K, Malio_LLM_By_Qwen_VL, Malio_LLM_Answer
 from .nodes.malio_llm import Malio_ARK_LLM_Answer
 from .nodes.malio_bbox import Malio_BBOXES
+from .nodes.malio_image_info import Malio_Comfy_Info_Params
 
 
 NODE_CLASS_MAPPINGS = {
@@ -35,6 +36,7 @@ NODE_CLASS_MAPPINGS = {
     "Maliooo_LoadImage": Malio_LoadImage,
     "Maliooo_LoadImageByPathSequence": Maliooo_LoadImageByPathSequence,
     "Maliooo_LoadImageByCsv": Maliooo_LoadImageByCsv,
+    "Maliooo_LoadImageByCsv_V2": Maliooo_LoadImageByCsv_V2,
     "Maliooo_LoadImageByPath": Maliooo_LoadImageByPath,
     "Maliooo_Repeat_and_Tile_Image": Malio_Repeat_and_Tile_Image,
     "Malio_Image_Watermark_Mask_V0": Malio_Image_Watermark_Mask_v0,
@@ -59,7 +61,7 @@ NODE_CLASS_MAPPINGS = {
     "Malio_LLM_Answer": Malio_LLM_Answer,
     "Malio_ARK_LLM_Answer": Malio_ARK_LLM_Answer,
     "Malio_BBOXES": Malio_BBOXES,
-
+    "Malio_Comfy_Info_Params": Malio_Comfy_Info_Params,
 }
 
 # A dictionary that contains the friendly/humanly readable titles for the nodes
@@ -80,6 +82,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "Maliooo_LoadImage": "Malio Load Image加载图片",
     "Maliooo_LoadImageByPathSequence": "Malio LoadImageByPathSequence 根据文件夹顺序加载图片",
     "Maliooo_LoadImageByCsv": "Malio LoadImageByCsv 根据csv加载图片",
+    "Maliooo_LoadImageByCsv_V2": "Malio LoadImageByCsv_V2 根据csv加载图片, 获取同一个task_id的其他生成图片",
     "Maliooo_LoadImageByPath": "Malio LoadImageByPath 根据路径加载单张图片",
     "Maliooo_Repeat_and_Tile_Image": "Malio Repeat and Tile Image 重复平铺图片",
     "Malio_Image_Watermark_Mask_V0": "Malio Image Watermark Mask 获取输入图片的水印遮罩_mask版本",
@@ -104,4 +107,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "Malio_LLM_Answer": "Malio_LLM_Answer 通过Qwen LLM得到描述",
     "Malio_ARK_LLM_Answer": "Malio_ARK_LLM_Answer 通过火山ARK LLM得到描述",
     "Malio_BBOXES": "Malio_BBOXES 使用python的eval函数生成bboxes",
+    "Malio_Comfy_Info_Params": "Malio_Comfy_Info_Params 根据url提取comfy生成的图片信息",
 }

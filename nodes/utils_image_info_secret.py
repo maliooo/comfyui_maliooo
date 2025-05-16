@@ -5,6 +5,8 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes  # 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import padding
 import json
+import requests
+import io
 
 SECRET_KEY = b'YourSecretKey123'  # Must be 16, 24, or 32 bytes
 ALGORITHM = algorithms.AES(SECRET_KEY)
@@ -61,6 +63,43 @@ def decrypt(encrypted_data):
     return decrypted_data.decode()
 
 
+def decrypt_image_info_by_url(image_url):
+    """解密图片信息"""
+
+    new_image = Image.open(io.BytesIO(requests.get(image_url).content))
+    try:
+        # 提取webui的信息
+        new_info = new_image.info["parameters"]
+        decrypted_info = decrypt(new_info)
+        json_info = decrypted_info[len("parameters="):]
+
+        return {
+            "json_info": json_info if isinstance(json_info, str) else json.dumps(json_info),
+            "type": "webui"
+        }
+    
+    except Exception as e:
+        print(e)
+
+    try:
+        # 提取comfyui的信息
+        new_info = new_image.info["prompt"]
+        decrypted_info = decrypt(new_info)
+        json_info = decrypted_info[len("prompt="):]
+        res = json.loads(json_info)
+        return {
+            "json_info": res if isinstance(res, str) else json.dumps(res),
+            "type": "comfyui"
+        }
+    except Exception as e:
+        print(e)
+
+    return {
+        "json_info": None,
+        "type": None
+    }
+
+
 def map_to_string(map_data):
     return json.dumps(map_data)
 
@@ -85,4 +124,7 @@ def main():
 
 
 if __name__ == "__main__":
-    info = main()
+    # info = main()
+    url = "https://image9.znzmo.com/677eaca2-055c-434c-b3f7-a387e49e715b.png"
+    info = decrypt_image_info_by_url(url)
+    print(info)

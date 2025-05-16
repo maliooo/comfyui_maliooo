@@ -10,7 +10,7 @@ import sys
 from PIL import Image, ImageOps, ImageSequence
 from PIL.PngImagePlugin import PngInfo
 import requests
-from .utils import pil2tensor, get_comfyui_images
+from .utils import pil2tensor, get_comfyui_images, get_column_type
 from .utils_image_info_secret import decrypt
 import random
 import node_helpers
@@ -23,6 +23,7 @@ import cv2
 import io
 from tqdm import tqdm
 from urllib3.exceptions import InsecureRequestWarning
+import pandas as pd
 
 # 禁用不安全请求的警告
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -512,7 +513,7 @@ class Maliooo_LoadImageByCsv:
                 "info_4": ("STRING", {"default": ""}),
                 "info_5": ("STRING", {"default": ""}),
                 "info_6": ("STRING", {"default": ""}),
-                "去重字段_1": ("STRING", {"default": ""}),
+                "去重字段_1": ("STRING", {"default": "", "tooltip": "去重字段如果写了风格参考图，则只会保留一个参考图为空"}),
                 "去重字段_2": ("STRING", {"default": ""}),
                 "去重字段_3": ("STRING", {"default": ""}),
                 "不为空字段_1": ("STRING", {"default": ""}),
@@ -577,8 +578,15 @@ class Maliooo_LoadImageByCsv:
         
         for col, value in equal_columns:
             if col in columns and col != "":
-                df = df[df[col] == value]
-
+                if get_column_type(df[col]) == "字符串类型":
+                    df = df[df[col] == value]
+                elif get_column_type(df[col]) == "整数类型":
+                    df = df[df[col] == int(value)]
+                elif get_column_type(df[col]) == "浮点数类型":
+                    df = df[df[col] == float(value)]
+                elif get_column_type(df[col]) == "布尔类型":
+                    df = df[df[col] == bool(value)]
+                    
         total_num = len(df)
         print(f"过滤后csv数据条数：{total_num}")
         if total_num == 0:
@@ -604,6 +612,176 @@ class Maliooo_LoadImageByCsv:
         #     return (None, None, None, None, None, None, None, None)
             
 
+
+class Maliooo_LoadImageByCsv_V2:
+    """从csv文件加载图片"""
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "csv_file_path": ("STRING", {}),
+            },
+            "optional": {
+                "获取同一个task_id的其他生成图片": ("BOOLEAN", {"default": False}),
+                "seed": ("INT", {"default": 0, "min": 0, "max": 0xFFFFFFFFFFFFFFFF}),
+                "key_task_id_字段名称": ("STRING", {"default": ""}),
+                "key_输入底图url_字段名称": ("STRING", {"default": ""}),
+                "key_输入风格参考图url_字段名称": ("STRING", {"default": ""}),
+                "key_输入遮罩url_字段名称": ("STRING", {"default": ""}),
+                "key_输入知末生成图url_字段名称": ("STRING", {"default": ""}),
+                "info_1": ("STRING", {"default": ""}),
+                "info_2": ("STRING", {"default": ""}),
+                "info_3": ("STRING", {"default": ""}),
+                "info_4": ("STRING", {"default": ""}),
+                "info_5": ("STRING", {"default": ""}),
+                "info_6": ("STRING", {"default": ""}),
+                "去重字段_1": ("STRING", {"default": ""}),
+                "去重字段_2": ("STRING", {"default": ""}),
+                "去重字段_3": ("STRING", {"default": ""}),
+                "不为空字段_1": ("STRING", {"default": ""}),
+                "不为空字段_2": ("STRING", {"default": ""}),
+                "不为空字段_3": ("STRING", {"default": ""}),
+                "为空字段_1": ("STRING", {"default": ""}),
+                "为空字段_2": ("STRING", {"default": ""}),
+                "为空字段_3": ("STRING", {"default": ""}),
+                "等于字段_1_字段名称": ("STRING", {"default": ""}),
+                "等于字段_1_字段值": ("STRING", {"default": ""}),
+                "等于字段_2_字段名称": ("STRING", {"default": ""}),
+                "等于字段_2_字段值": ("STRING", {"default": ""}),
+                "等于字段_3_字段名称": ("STRING", {"default": ""}),
+                "等于字段_3_字段值": ("STRING", {"default": ""}),
+            },
+        }
+
+    RETURN_TYPES = ("INT", "STRING", "STRING", "STRING", "STRING", "STRING", "LIST", "STRING", "STRING", "STRING", "STRING", "STRING", "STRING")
+    RETURN_NAMES = ("csv数据条数", "columns", "task_id", "输入底图url", "输入风格参考图url", "输入遮罩url", "输入知末生成图url_list", "info_1", "info_2", "info_3", "info_4", "info_5", "info_6")
+    FUNCTION = "load_images_sequence"
+    CATEGORY = "🐼malio/image"
+
+    def load_images_sequence(
+            self, csv_file_path, 
+            获取同一个task_id的其他生成图片, seed, 
+            key_task_id_字段名称="",
+            key_输入底图url_字段名称="",
+            key_输入风格参考图url_字段名称="",
+            key_输入遮罩url_字段名称="",
+            key_输入知末生成图url_字段名称="",
+            info_1="", info_2="", info_3="", info_4="", info_5="", info_6="",
+            去重字段_1="", 去重字段_2="", 去重字段_3="", 
+            不为空字段_1="", 不为空字段_2="", 不为空字段_3="",
+            为空字段_1="", 为空字段_2="", 为空字段_3="",
+            等于字段_1_字段名称="", 等于字段_1_字段值="",
+            等于字段_2_字段名称="", 等于字段_2_字段值="",
+            等于字段_3_字段名称="", 等于字段_3_字段值="",
+    ):
+        """顺序加载文件夹中的图片，支持随机加载。 一张一张加载"""
+        # try:
+        print(f"开始加载csv文件：{csv_file_path}")
+        print(f"传入参数：获取同一个task_id的其他生成图片：{获取同一个task_id的其他生成图片}, seed：{seed}, key_task_id_字段名称：{key_task_id_字段名称}, key_输入底图url_字段名称：{key_输入底图url_字段名称}, key_输入风格参考图url_字段名称：{key_输入风格参考图url_字段名称}, key_输入遮罩url_字段名称：{key_输入遮罩url_字段名称}, key_输入知末生成图url_字段名称：{key_输入知末生成图url_字段名称}, info_1：{info_1}, info_2：{info_2}, info_3：{info_3}, info_4：{info_4}, info_5：{info_5}, info_6：{info_6}, 去重字段_1：{去重字段_1}, 去重字段_2：{去重字段_2}, 去重字段_3：{去重字段_3}, 不为空字段_1：{不为空字段_1}, 不为空字段_2：{不为空字段_2}, 不为空字段_3：{不为空字段_3}, 为空字段_1：{为空字段_1}, 为空字段_2：{为空字段_2}, 为空字段_3：{为空字段_3}, 等于字段_1_字段名称：{等于字段_1_字段名称}, 等于字段_1_字段值：{等于字段_1_字段值}, 等于字段_2_字段名称：{等于字段_2_字段名称}, 等于字段_2_字段值：{等于字段_2_字段值}, 等于字段_3_字段名称：{等于字段_3_字段名称}, 等于字段_3_字段值：{等于字段_3_字段值}")
+
+        if not os.path.exists(csv_file_path):
+            raise Exception(f"csv文件路径错误：{csv_file_path}")
+        if csv_file_path.lower().endswith((".csv")):
+            df = pd.read_csv(csv_file_path, header=0)
+        elif csv_file_path.lower().endswith((".xlsx")):
+            df = pd.read_excel(csv_file_path, header=0)
+        else:
+            raise Exception(f"csv文件路径错误：{csv_file_path}")
+        
+        print(f"过滤前csv数据条数：{len(df)}")
+        columns = df.columns.tolist()
+        print(f"csv文件列名：{columns}")
+
+        if key_输入底图url_字段名称 and key_输入风格参考图url_字段名称:
+            # 如果输入了底图和参考图, 去除底图和参考图相同的行
+            # df = df[df[key_输入底图url_字段名称] != df[key_输入风格参考图url_字段名称]]
+            print(f"过滤条件：{key_输入底图url_字段名称} != {key_输入风格参考图url_字段名称}, 过滤后数据条数：{len(df)}")
+
+        raw_df = df
+
+        duplicate_columns = [去重字段_1, 去重字段_2, 去重字段_3]
+        not_null_columns = [不为空字段_1, 不为空字段_2, 不为空字段_3]
+        null_columns = [为空字段_1, 为空字段_2, 为空字段_3]
+        equal_columns = [(等于字段_1_字段名称, 等于字段_1_字段值), (等于字段_2_字段名称, 等于字段_2_字段值), (等于字段_3_字段名称, 等于字段_3_字段值)]
+        
+        for col in not_null_columns:
+            if col in columns and col != "":
+                df = df.dropna(subset=[col])
+                print(f"过滤条件：{col} 不为空后数据条数：{len(df)}")
+        for col in null_columns:
+            if col in columns and col != "":
+                df = df[df[col].isnull()]
+                print(f"过滤条件：{col} 为空后数据条数：{len(df)}")
+        for col in duplicate_columns:
+            if col in columns and col != "":
+                df = df.drop_duplicates(subset=[col], keep="first")
+                print(f"过滤条件：{col} 去重后数据条数：{len(df)}")
+        
+        for col, value in equal_columns:
+            if col in columns and col != "":
+                if get_column_type(df[col]) == "字符串类型":
+                    df = df[df[col] == value]
+                elif get_column_type(df[col]) == "整数类型":
+                    df = df[df[col] == int(value)]
+                elif get_column_type(df[col]) == "浮点数类型":
+                    df = df[df[col] == float(value)]
+                elif get_column_type(df[col]) == "布尔类型":
+                    df = df[df[col] == bool(value)]
+                print(f"过滤条件：{col} == {value}, 过滤后数据条数：{len(df)}")
+
+        total_num = len(df)
+        print(f"过滤后csv数据条数：{total_num}")
+        if total_num == 0:
+            return (None, None, None, None, None, None, None, None)
+        
+        iloc = seed % total_num
+
+        return_values = []
+        
+        args = [info_1, info_2, info_3, info_4, info_5, info_6]
+        for para in args:
+            print(f"参数：{para}")
+            if para == "" or para not in columns or pd.isna(df.iloc[iloc][para]):
+                return_values.append(None)
+            else:
+                return_values.append(str(df.iloc[iloc][para]))
+        
+        return_values_2 = []
+        for name, col in zip(["key_task_id_字段名称", "key_输入底图url_字段名称", "key_输入风格参考图url_字段名称", "key_输入遮罩url_字段名称", "key_输入知末生成图url_字段名称"],
+                             [key_task_id_字段名称, key_输入底图url_字段名称, key_输入风格参考图url_字段名称, key_输入遮罩url_字段名称, key_输入知末生成图url_字段名称]):
+            if col in columns and col != "":
+                # Literal["字符串类型", "整数类型", "浮点数类型", "布尔类型", "未知类型"]
+                if get_column_type(df[col]) == "字符串类型":
+                    if name == "key_输入知末生成图url_字段名称":
+                        # 获取同一个task_id的其他生成图片
+                        if 获取同一个task_id的其他生成图片:
+                            task_id = int(df.iloc[iloc][key_task_id_字段名称])
+                            znzmo_url_list = raw_df[raw_df[key_task_id_字段名称] == task_id][key_输入知末生成图url_字段名称].tolist()
+                            print(f"获取同一个task_id的其他生成图片：{znzmo_url_list}, 类型为：{type(znzmo_url_list)}")
+                            return_values_2.append(znzmo_url_list)
+                        else:
+                            return_values_2.append([str(df.iloc[iloc][col])])
+                    else:
+                        return_values_2.append(str(df.iloc[iloc][col]))
+                elif get_column_type(df[col]) == "整数类型":
+                    return_values_2.append(int(df.iloc[iloc][col]))
+                elif get_column_type(df[col]) == "浮点数类型":
+                    return_values_2.append(float(df.iloc[iloc][col]))
+                elif get_column_type(df[col]) == "布尔类型":
+                    return_values_2.append(bool(df.iloc[iloc][col]))
+                else:
+                    return_values_2.append(None)
+            else:
+                return_values_2.append(None)
+        
+        print(f"返回参数：{return_values}")
+        return tuple([total_num] + [str(columns)] +return_values_2 +  return_values)
+
+        # except Exception as e:
+        #     print(f"加载csv文件出错，请检查文件路径：{e}")
+        #     return (None, None, None, None, None, None, None, None)
+         
 
 
 
@@ -1163,3 +1341,4 @@ class Malio_SD35_Image_Resize:
 #         # 将PIL.Image对象列表返回,转换为 comfyui 的 IMAGE 类型
 #         output_image, output_mask = get_comfyui_images(suapp_image_list)
 #         return (output_image, output_mask,)
+

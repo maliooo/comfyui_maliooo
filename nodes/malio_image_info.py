@@ -3,6 +3,7 @@ import folder_paths
 from .controlnet import apply_preprocessor
 from .constant.preprocess import WEBUI_2_COMFYUI_PREPROCESS
 from .utils import extract_info_from_webui_img
+from .utils_image_info_secret import decrypt_image_info_by_url
 
 # def extract_info_from_webui_img(info:str):
 #     """从webui 生成的img中提取信息"""
@@ -243,6 +244,70 @@ class Malio_Webui_Info_Params:
         print(f"提取的controlnet: {controlnets}")
         print(f"提取的lora: {loras}")
         return (positive_text, negative_text, json.dumps(params_dict), int(params_dict["seed"]), controlnets, loras, checkpoint_name, negative_text_no_embedding)
+
+
+class Malio_Comfy_Info_Params:
+    def __init__(self) -> None:
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "url": ("STRING", {"default": "", "tooltip": "输入图片的url, 提取知末生成信息"})
+            }
+        }
+    
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("checkpoint_name",)
+
+    FUNCTION = "get_comfy_params_info"
+
+    # CATEGORY = "🐼malio/webui/info"
+
+    def get_image_checkpoint(self,info_str:str):
+    
+        comfyui_json_info = json.loads(info_str)
+        checkpoint_name_list = []
+        for key, value in comfyui_json_info.items():
+            try:
+                if value["class_type"] == "CheckpointLoaderSimple":
+                    checkpoint_name = value["inputs"]["ckpt_name"]
+                    checkpoint_name_list.append(checkpoint_name)
+                    # print(f"提取到checkpoint: {checkpoint_name}")
+                
+                if value["class_type"] == "UNETLoader":
+                    checkpoint_name = value["inputs"]["unet_name"]
+                    checkpoint_name_list.append(checkpoint_name)
+                    # print(f"提取到checkpoint: {checkpoint_name}")
+
+            except Exception as e:
+                print(f"获取生成图片comfyui的模型信息失败, e={e}")
+                return None
+        
+        checkpoint_name_list = [name for name in checkpoint_name_list if isinstance(name, str)]
+        if len(checkpoint_name_list) == 0:
+            return None
+        else:
+            print(f"返回的checkpoint: {'_'.join(checkpoint_name_list)}")
+            return "_".join(checkpoint_name_list)
+
+
+    def get_comfy_params_info(self, url:str):
+        """根据url提取comfy生成的图片信息"""
+        info_dict = decrypt_image_info_by_url(url)
+        if info_dict["type"] != "comfyui":
+            print(f"url: {url} 不是comfyui生成的图片")
+            return (None) * len(self.RETURN_TYPES)
+        
+        json_info_str = info_dict["json_info"]
+        checkpoint_name = self.get_image_checkpoint(json_info_str)
+        # print(f"checkpoint为: {checkpoint_name}")
+        return (checkpoint_name,)
+
+
+
+
 
 
 class Maliooo_Get_Controlnet_Stack:
