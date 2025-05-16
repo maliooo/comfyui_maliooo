@@ -19,6 +19,20 @@ def load_module(module_path, module_name=None):
     module_spec.loader.exec_module(module)
 
     return module
+def load_module(module_path, module_name=None):
+    import importlib.util
+
+    if module_name is None:
+        module_name = os.path.basename(module_path)
+        if os.path.isdir(module_path):
+            module_path = os.path.join(module_path, "__init__.py")
+
+    module_spec = importlib.util.spec_from_file_location(module_name, module_path)
+
+    module = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(module)
+
+    return module
 
 custom_nodes = folder_paths.get_folder_paths("custom_nodes")
 advanced_cnet_dir_names = ["AdvancedControlNet", "ComfyUI-Advanced-ControlNet"]

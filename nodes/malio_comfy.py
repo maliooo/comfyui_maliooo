@@ -43,6 +43,8 @@ class Malio_CheckpointLoaderSimple:
 
     RETURN_TYPES = ("MODEL", "CLIP", "VAE", "STRING")
     RETURN_NAMES = ("model", "clip", "vae", "model_path")
+    RETURN_TYPES = ("MODEL", "CLIP", "VAE", "STRING")
+    RETURN_NAMES = ("model", "clip", "vae", "model_path")
     FUNCTION = "load_checkpoint"
 
     CATEGORY = "🐼malio/loaders"

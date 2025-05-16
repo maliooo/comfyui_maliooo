@@ -79,6 +79,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "Maliooo_Get_Controlnet_Stack": "根据webui的生成信息，得到controlnet_stack列表",
     "Maliooo_Get_Lora_Stack": "根据webui的生成信息，得到lora_stack列表",
     "Maliooo_CheckpointLoaderSimple": "Malio load_checkpoint 模型加载器",
+    "Maliooo_CheckpointLoaderSimple": "Malio load_checkpoint 模型加载器",
     "Maliooo_LoadImage": "Malio Load Image加载图片",
     "Maliooo_LoadImageByPathSequence": "Malio LoadImageByPathSequence 根据文件夹顺序加载图片",
     "Maliooo_LoadImageByCsv": "Malio LoadImageByCsv 根据csv加载图片",
