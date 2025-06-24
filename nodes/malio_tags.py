@@ -39,7 +39,7 @@ def get_qwen_vl_response(base64_image, prompt, model_type="qwen-vl-plus"):
               ]
             }
         ],
-        max_tokens=255,
+        max_tokens=384,
         temperature=1.0,
         )
     # print(completion.model_dump_json())
@@ -138,6 +138,10 @@ class Malio_LLM_By_Qwen_VL:
                 "replace_flag_1": ("STRING", dict(tooltip="替换prompt中的标志")),
             }
         }
+    
+    @classmethod
+    def VALIDATE_INPUTS(cls, input_types):
+        return True
 
     RETURN_TYPES = ( "STRING", "STRING", "STRING")
     RETURN_NAMES = ("llm_answer", "llm_prompt", "llm_info")
@@ -190,6 +194,10 @@ class Malio_LLM_Answer:
                 "replace_flag_4": ("STRING", dict(tooltip="等待替换标志replace_flag_4", default="replace_flag_4")),
             }
         }
+    
+    @classmethod
+    def VALIDATE_INPUTS(cls, input_types):
+        return True
 
     RETURN_TYPES = ( "STRING", "STRING", "STRING", "STRING")
     RETURN_NAMES = ("llm_answer", "llm_prompt", "llm_info", "other_info")

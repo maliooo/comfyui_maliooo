@@ -5,6 +5,8 @@ from PIL import Image, ImageOps, ImageSequence
 import re
 import cv2
 import pandas as pd
+import base64
+import io
 
 def pil2tensor(image: Union[Image.Image, List[Image.Image]]) -> torch.Tensor:
     """传入一个PIL Image对象或者一个Image对象列表，返回一个tensor"""
@@ -25,6 +27,13 @@ def tensor2pil(tensor: torch.Tensor):
         img = img.convert("RGB")
         image_list.append(img)
     return image_list
+
+def pil2base64(image: Image.Image):
+    """传入一个PIL Image对象，返回一个base64字符串"""
+    buffer = io.BytesIO()
+    image.save(buffer, format='PNG')
+    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    return image_base64
 
 
 def pil2cv2(image: Union[Image.Image, List[Image.Image]]):

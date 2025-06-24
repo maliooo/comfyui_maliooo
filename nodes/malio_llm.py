@@ -76,6 +76,10 @@ class Malio_ARK_LLM_Answer:
                 "replace_flag_4": ("STRING", dict(tooltip="等待替换标志replace_flag_4", default="replace_flag_4")),
             }
         }
+    
+    @classmethod
+    def VALIDATE_INPUTS(cls, input_types):
+        return True
 
     RETURN_TYPES = ( "STRING", "STRING", "STRING", "STRING", "STRING")
     RETURN_NAMES = ("llm_answer", "llm_prompt", "llm_info", "other_info", "llm_thinking")
