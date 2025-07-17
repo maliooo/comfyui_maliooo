@@ -39,7 +39,7 @@ def get_qwen_vl_response(base64_image, prompt, model_type="qwen-vl-plus"):
               ]
             }
         ],
-        max_tokens=384,
+        max_tokens=1024,
         temperature=1.0,
         )
     # print(completion.model_dump_json())
@@ -58,7 +58,7 @@ def get_qwen_response(prompt, model_type="qwen-plus"):
 
     )
     completion = client.chat.completions.create(
-        model="qwen-turbo",
+        model=model_type,
         messages=[
             {'role': 'system', 'content': 'You are a helpful assistant.'},
             {'role': 'user', 'content': prompt}],
@@ -67,10 +67,14 @@ def get_qwen_response(prompt, model_type="qwen-plus"):
         
         )
     json_res = json.loads(completion.model_dump_json())
+    print(json_res)
     content = json_res["choices"][0]["message"]["content"]
+    # message_info = dict(completion.choices[0].message)
     return {
         "text": content,
-        "json": completion.model_dump_json()
+        "json": completion.model_dump_json(),
+        "thinking": completion.choices[0].message.reasoning_content if "reasoning_content" in json_res["choices"][0]["message"] else "",
+
     }
 
 

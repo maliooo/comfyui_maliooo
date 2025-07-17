@@ -3,6 +3,7 @@ import omegaconf
 import httpx
 from volcenginesdkarkruntime import Ark
 import time
+from .malio_tags import get_qwen_response
 
 conf = omegaconf.OmegaConf.load(os.path.join(os.path.dirname(__file__), "config.yaml"))
 print(conf)
@@ -101,7 +102,10 @@ class Malio_ARK_LLM_Answer:
         if model_id == "":
             model_id = self.model_type_2_model_id[model_type]
         try:
-            llm_answer = get_ark_response(llm_prompt, model_id=model_id, model_type=model_type)
+            if "deepseek" in str(model_type).lower():
+                llm_answer = get_qwen_response(llm_prompt, model_type=str(model_type).lower())
+            else:
+                llm_answer = get_ark_response(llm_prompt, model_id=model_id, model_type=model_type)
             # print(f"调用火山ARK的{model_type}模型进行LLM, 返回结果为: {llm_answer['text']}")
             # print(f"请求响应为: {llm_answer['json']}")
             
