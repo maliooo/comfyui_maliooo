@@ -67,9 +67,7 @@ def get_qwen_response(prompt, model_type="qwen-plus"):
         
         )
     json_res = json.loads(completion.model_dump_json())
-    print(json_res)
     content = json_res["choices"][0]["message"]["content"]
-    # message_info = dict(completion.choices[0].message)
     return {
         "text": content,
         "json": completion.model_dump_json(),
