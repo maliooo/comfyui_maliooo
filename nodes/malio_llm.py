@@ -1,7 +1,7 @@
 import os
 import omegaconf
 import httpx
-from volcenginesdkarkruntime import Ark
+from volcenginesdkarkruntime import Ark  # 通过 pip install volcengine-python-sdk[ark] 安装方舟SDK
 import time
 from .malio_tags import get_qwen_response
 
